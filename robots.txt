@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /demo-widget.html
+
+Sitemap: https://contractor-quote-widget.pages.dev/sitemap.xml

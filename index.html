@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ContractorQuote — Embeddable HTML Quote Calculator Widget for Contractors</title>
+  <meta name="description" content="Zero-backend, single-file HTML quote and payment calculator widget for plumbers, roofers, HVAC, electricians, and painters. Instant price ranges, 3 themes, no monthly SaaS fees." />
+  <meta property="og:title" content="ContractorQuote — 5-Trade HTML Quote &amp; Payment Calculator Widget" />
+  <meta property="og:description" content="Drop an instant homeowner estimate calculator onto any contractor website. Single HTML file, 5 ready-to-use trades, 3 themes, zero server fees." />
+  <meta property="og:type" content="website" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "ContractorQuote 5-Trade HTML Quote Calculator Bundle",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Web (Static HTML, WordPress, Squarespace, Wix, Webflow, Carrd)",
+    "description": "Self-contained single-file HTML quote and payment calculator widget for local home service trades including plumbing, roofing, HVAC, electrical, and interior painting.",
+    "offers": [
+      {
+        "@type": "Offer",
+        "name": "Single-Site License",
+        "price": "29.00",
+        "priceCurrency": "USD"
+      },
+      {
+        "@type": "Offer",
+        "name": "Agency / Unlimited Client License",
+        "price": "79.00",
+        "priceCurrency": "USD"
+      }
+    ]
+  }
+  </script>
+  <style>
+    :root {
+      --bg: #EEF2F6;
+      --bg-dots: radial-gradient(rgba(15, 23, 42, 0.075) 1px, transparent 1px);
+      --surface: #FFFFFF;
+      --surface-soft: #F8FAFC;
+      --surface-tray: #E7EDF4;
+      --paper: #FAF8F4;
+      --paper-border: #DDD7CB;
+      --border: #D5DFEA;
+      --border-strong: #B8C7D9;
+      --ink: #0F172A;
+      --ink-secondary: #334155;
+      --ink-muted: #475569;
+      --accent: #1D4ED8;
+      --accent-hover: #1E40AF;
+      --accent-soft: #EFF6FF;
+      --accent-border: #BFDBFE;
+      --success: #047857;
+      --success-soft: #ECFDF5;
+      --code-bg: #0F172A;
+      --code-ink: #E2E8F0;
+      --shadow-sheet: 0 2px 4px rgba(15, 23, 42, 0.04), 0 18px 42px -18px rgba(15, 23, 42, 0.14);
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-display: 'Plus Jakarta Sans', 'Inter', sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    ::selection { background: var(--accent); color: #FFFFFF; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: var(--font-sans);
+      background-color: var(--bg);
+      background-image: radial-gradient(circle at 50% 0%, rgba(29, 78, 216, 0.06), transparent 55%), var(--bg-dots);
+      background-size: auto, 24px 24px;
+      color: var(--ink);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; }
+    button { font-family: inherit; }
+    .tabular { font-variant-numeric: tabular-nums; }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* ==========================================================================
+       TOP NAVIGATION BAR
+       ========================================================================== */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(10px);
+      border-bottom: 1.5px solid var(--border);
+    }
+
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      min-height: 64px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 18px;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+    }
+
+    .brand-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
+      background: var(--accent);
+      color: #FFFFFF;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .nav-links a {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--ink-secondary);
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+
+    .nav-links a:hover { color: var(--accent); }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 11px 18px;
+      border-radius: 9px;
+      background: var(--accent);
+      color: #FFFFFF;
+      font-weight: 700;
+      font-size: 14px;
+      text-decoration: none;
+      border: 0;
+      cursor: pointer;
+      min-height: 42px;
+      transition: background-color 0.15s ease, transform 0.1s ease;
+      box-shadow: 0 2px 6px rgba(29, 78, 216, 0.22);
+    }
+
+    .btn-primary:hover { background: var(--accent-hover); }
+    .btn-primary:active { transform: translateY(1px); }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 11px 18px;
+      border-radius: 9px;
+      background: var(--surface);
+      color: var(--ink);
+      font-weight: 700;
+      font-size: 14px;
+      text-decoration: none;
+      border: 1.5px solid var(--border-strong);
+      cursor: pointer;
+      min-height: 42px;
+      transition: background-color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .btn-secondary:hover {
+      background: var(--surface-soft);
+      border-color: var(--ink-muted);
+    }
+
+    a:focus-visible,
+    button:focus-visible,
+    summary:focus-visible {
+      outline: 2.5px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    /* ==========================================================================
+       HERO + LIVE EMBEDDED DEMO WORKBENCH
+       ========================================================================== */
+    .hero-band {
+      padding: 44px 0 28px;
+    }
+
+    .hero-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.65fr);
+      gap: 28px;
+      align-items: end;
+      margin-bottom: 26px;
+    }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(32px, 4.4vw, 50px);
+      font-weight: 800;
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      margin: 0 0 14px;
+      color: var(--ink);
+      text-wrap: balance;
+    }
+
+    .hero-lead {
+      font-size: 17px;
+      color: var(--ink-secondary);
+      margin: 0;
+      max-width: 60ch;
+      line-height: 1.55;
+    }
+
+    .hero-cta-stack {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 18px 20px;
+      border-radius: 14px;
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      box-shadow: var(--shadow-sheet);
+    }
+
+    .hero-cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      width: 100%;
+    }
+
+    .hero-cta-row .btn-primary { flex: 1; }
+
+    .hero-facts {
+      font-size: 13px;
+      color: var(--ink-muted);
+      margin: 0;
+      line-height: 1.45;
+    }
+
+    .hero-facts strong { color: var(--ink); }
+
+    /* Interactive Demo Frame */
+    .demo-workbench {
+      background: var(--surface);
+      border: 2px solid var(--border-strong);
+      border-radius: 20px;
+      box-shadow: var(--shadow-sheet);
+      overflow: hidden;
+    }
+
+    .demo-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 16px;
+      background: var(--surface-soft);
+      border-bottom: 1.5px solid var(--border);
+    }
+
+    .tool-cluster {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .cluster-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--ink-muted);
+      margin-right: 2px;
+    }
+
+    .pill-group {
+      display: inline-flex;
+      flex-wrap: wrap;
+      padding: 3px;
+      border-radius: 9px;
+      background: var(--surface-tray);
+      border: 1px solid var(--border);
+      gap: 3px;
+    }
+
+    .demo-pill {
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--ink-secondary);
+      font-size: 13px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 7px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 34px;
+      transition: background-color 0.15s ease, color 0.15s ease;
+    }
+
+    .demo-pill:hover { color: var(--ink); }
+
+    .demo-pill[aria-pressed="true"] {
+      background: var(--surface);
+      color: var(--ink);
+      border-color: var(--border);
+      font-weight: 700;
+      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.1);
+    }
+
+    .locked-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 10px;
+      border-radius: 7px;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--ink-muted);
+      text-decoration: none;
+      opacity: 0.85;
+      transition: color 0.15s ease, background-color 0.15s ease;
+    }
+
+    .locked-pill:hover {
+      color: var(--accent);
+      background: rgba(255, 255, 255, 0.65);
+    }
+
+    .swatch {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      border: 1px solid rgba(15, 23, 42, 0.28);
+      flex-shrink: 0;
+    }
+
+    .demo-stage {
+      padding: 16px;
+      background: var(--surface-tray);
+      transition: background-color 0.25s ease;
+    }
+
+    .demo-stage[data-stage-theme="blueprint"] { background: #071525; }
+    .demo-stage[data-stage-theme="slate"] { background: #090C11; }
+
+    #liveDemoFrame {
+      width: 100%;
+      height: 920px;
+      border: 0;
+      border-radius: 14px;
+      display: block;
+      background: transparent;
+      transition: height 0.2s ease;
+    }
+
+    .demo-footnote-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 18px;
+      background: var(--paper);
+      border-top: 1.5px solid var(--paper-border);
+      font-size: 13.5px;
+      color: var(--ink-secondary);
+    }
+
+    .demo-footnote-bar a {
+      font-weight: 700;
+      color: var(--accent);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    /* ==========================================================================
+       SECTIONS & ARCHITECTURAL SPEC BLOCKS
+       ========================================================================== */
+    section.content-section {
+      padding: 56px 0 12px;
+    }
+
+    .section-head {
+      max-width: 68ch;
+      margin-bottom: 24px;
+    }
+
+    .section-head h2 {
+      font-family: var(--font-display);
+      font-size: clamp(24px, 3.2vw, 34px);
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      line-height: 1.15;
+      margin: 0 0 10px;
+      color: var(--ink);
+    }
+
+    .section-head p {
+      margin: 0;
+      font-size: 16px;
+      color: var(--ink-secondary);
+    }
+
+    /* Comparison Table Sheet */
+    .spec-sheet {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: 18px;
+      box-shadow: var(--shadow-sheet);
+      overflow: hidden;
+    }
+
+    .table-scroll { overflow-x: auto; }
+
+    table.compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14.5px;
+      min-width: 600px;
+    }
+
+    .compare-table th,
+    .compare-table td {
+      text-align: left;
+      padding: 15px 20px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+
+    .compare-table thead th {
+      background: var(--surface-soft);
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 14.5px;
+      color: var(--ink);
+    }
+
+    .compare-table thead th.col-win {
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+
+    .compare-table td.col-win {
+      background: rgba(239, 246, 255, 0.45);
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .compare-table tbody tr:last-child td { border-bottom: 0; }
+
+    /* 5-Trade Ledger + Config Code Split */
+    .bundle-split {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+      gap: 22px;
+      align-items: start;
+    }
+
+    .ledger-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .ledger-item {
+      padding: 18px 22px;
+      border-bottom: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: 112px 1fr;
+      gap: 14px;
+      align-items: baseline;
+    }
+
+    .ledger-item:last-child { border-bottom: 0; }
+
+    .ledger-trade {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 15px;
+      color: var(--ink);
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .trade-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .ledger-detail {
+      font-size: 14px;
+      color: var(--ink-secondary);
+      line-height: 1.5;
+    }
+
+    .ledger-detail strong { color: var(--ink); }
+
+    .code-window {
+      background: var(--code-bg);
+      border-radius: 18px;
+      border: 1.5px solid #1E293B;
+      box-shadow: var(--shadow-sheet);
+      overflow: hidden;
+      color: var(--code-ink);
+    }
+
+    .code-window-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 18px;
+      background: #1E293B;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: #CBD5E1;
+      font-weight: 600;
+    }
+
+    .code-window pre {
+      margin: 0;
+      padding: 20px;
+      overflow-x: auto;
+      font-family: var(--font-mono);
+      font-size: 12.5px;
+      line-height: 1.6;
+      color: #E2E8F0;
+    }
+
+    .tok-k { color: #7DD3FC; }
+    .tok-s { color: #86EFAC; }
+    .tok-n { color: #FDE68A; }
+    .tok-c { color: #94A3B8; }
+
+    .code-caption {
+      padding: 14px 20px;
+      background: #162032;
+      border-top: 1px solid #263449;
+      font-size: 13.5px;
+      color: #CBD5E1;
+      line-height: 1.5;
+    }
+
+    /* ==========================================================================
+       LICENSING & PRICING (2 CLEAN TIERS)
+       ========================================================================== */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 22px;
+      align-items: stretch;
+    }
+
+    .tier-sheet {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: 18px;
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      box-shadow: var(--shadow-sheet);
+    }
+
+    .tier-sheet.is-agency {
+      background: var(--paper);
+      border: 2px solid var(--accent);
+    }
+
+    .tier-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .tier-name {
+      font-family: var(--font-display);
+      font-size: 21px;
+      font-weight: 800;
+      margin: 0 0 4px;
+      color: var(--ink);
+    }
+
+    .tier-sub {
+      margin: 0;
+      font-size: 14px;
+      color: var(--ink-secondary);
+    }
+
+    .tier-tag {
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      border: 1px solid var(--accent-border);
+      white-space: nowrap;
+    }
+
+    .tier-price-row {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      padding: 14px 0;
+      border-top: 1.5px dashed var(--border-strong);
+      border-bottom: 1.5px dashed var(--border-strong);
+    }
+
+    .tier-price {
+      font-family: var(--font-display);
+      font-size: 42px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1;
+      color: var(--ink);
+    }
+
+    .tier-billing {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--ink-muted);
+    }
+
+    .tier-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex: 1;
+    }
+
+    .tier-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 14.5px;
+      color: var(--ink-secondary);
+    }
+
+    .tier-list svg {
+      color: var(--success);
+      flex-shrink: 0;
+      margin-top: 3px;
+    }
+
+    .tier-list strong { color: var(--ink); }
+
+    .tier-cta {
+      width: 100%;
+      padding: 13px 18px;
+      font-size: 15px;
+    }
+
+    .bundle-contents-strip {
+      margin-top: 18px;
+      padding: 16px 22px;
+      border-radius: 12px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      font-size: 14px;
+      color: var(--ink-secondary);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .bundle-contents-strip code {
+      font-family: var(--font-mono);
+      font-size: 12.5px;
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+      padding: 2px 6px;
+      border-radius: 5px;
+      color: var(--ink);
+    }
+
+    /* ==========================================================================
+       FAQ ACCORDION
+       ========================================================================== */
+    .faq-sheet {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: 18px;
+      box-shadow: var(--shadow-sheet);
+      overflow: hidden;
+    }
+
+    .faq-sheet details {
+      border-bottom: 1px solid var(--border);
+    }
+
+    .faq-sheet details:last-child { border-bottom: 0; }
+
+    .faq-sheet summary {
+      list-style: none;
+      padding: 18px 24px;
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--ink);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .faq-sheet summary::-webkit-details-marker { display: none; }
+
+    .faq-sheet summary::after {
+      content: '+';
+      font-family: var(--font-mono);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .faq-sheet details[open] summary::after { content: '−'; }
+
+    .faq-body {
+      padding: 0 24px 20px;
+      font-size: 14.5px;
+      color: var(--ink-secondary);
+      max-width: 74ch;
+    }
+
+    .faq-body p { margin: 0; }
+
+    /* ==========================================================================
+       FOOTER
+       ========================================================================== */
+    footer.site-footer {
+      margin-top: 64px;
+      padding: 28px 0 44px;
+      border-top: 1.5px solid var(--border);
+      color: var(--ink-muted);
+      font-size: 13.5px;
+    }
+
+    .footer-inner {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    /* ==========================================================================
+       RESPONSIVE
+       ========================================================================== */
+    @media (max-width: 940px) {
+      .hero-layout,
+      .bundle-split,
+      .pricing-grid {
+        grid-template-columns: 1fr;
+      }
+      .nav-links { display: none; }
+    }
+
+    @media (max-width: 580px) {
+      .hero-band { padding-top: 26px; }
+      .demo-stage { padding: 8px; }
+      .ledger-item {
+        grid-template-columns: 1fr;
+        gap: 4px;
+      }
+      .tier-sheet { padding: 22px 18px; }
+      .faq-sheet summary { padding: 16px 18px; }
+      .faq-body { padding: 0 18px 18px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <a class="brand" href="#top">
+        <span class="brand-icon" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/><path d="M8 7h8M8 11h8M8 15h5"/></svg>
+        </span>
+        <span>ContractorQuote</span>
+      </a>
+
+      <nav class="nav-links" aria-label="Page navigation">
+        <a href="#live-demo">Live Demo</a>
+        <a href="#compare">Why Static HTML</a>
+        <a href="#whats-included">5 Trades Included</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+
+      <a class="btn-primary" href="#pricing">Get the 5-Trade Bundle</a>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- Hero + Working Live Demo -->
+    <section class="hero-band" id="live-demo">
+      <div class="container">
+        <div class="hero-layout">
+          <div>
+            <h1 class="hero-title">An instant quote calculator for local trades — with zero monthly fees.</h1>
+            <p class="hero-lead">
+              Drop a single self-contained HTML file onto any contractor website. Homeowners pick a service, slide their project size, see an itemized price range and monthly payment in 30 seconds, and send a pre-filled booking slip by email or SMS.
+            </p>
+          </div>
+
+          <div class="hero-cta-stack">
+            <div class="hero-cta-row">
+              <a class="btn-primary" data-buy-link="single" href="#pricing">Buy Bundle — $29</a>
+              <a class="btn-secondary" href="#pricing">Agency License</a>
+            </div>
+            <p class="hero-facts">
+              <strong>One-time payment.</strong> Includes 5 ready-to-edit trades, 3 themes, white-label setup guide, and auto-resizing embed code.
+            </p>
+          </div>
+        </div>
+
+        <!-- Interactive Live Demo Workbench -->
+        <div class="demo-workbench">
+          <div class="demo-toolbar" role="region" aria-label="Interactive demo controls">
+            <div class="tool-cluster">
+              <span class="cluster-label">Try live:</span>
+              <div class="pill-group" role="group" aria-label="Switch demo trade">
+                <button type="button" class="demo-pill" data-demo-trade="plumbing" aria-pressed="true">Plumbing</button>
+                <button type="button" class="demo-pill" data-demo-trade="roofing" aria-pressed="false">Roofing</button>
+                <a class="locked-pill" href="#pricing" title="Included in the full 5-Trade Bundle">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                  HVAC
+                </a>
+                <a class="locked-pill" href="#pricing" title="Included in the full 5-Trade Bundle">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                  Electrical
+                </a>
+                <a class="locked-pill" href="#pricing" title="Included in the full 5-Trade Bundle">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                  Painting
+                </a>
+              </div>
+            </div>
+
+            <div class="tool-cluster">
+              <span class="cluster-label">Theme:</span>
+              <div class="pill-group" role="group" aria-label="Switch demo theme">
+                <button type="button" class="demo-pill" data-demo-theme="clean" aria-pressed="true">
+                  <span class="swatch" style="background:#FFFFFF"></span>Light Aluminum
+                </button>
+                <button type="button" class="demo-pill" data-demo-theme="blueprint" aria-pressed="false">
+                  <span class="swatch" style="background:#153455"></span>Cyanotype
+                </button>
+                <button type="button" class="demo-pill" data-demo-theme="slate" aria-pressed="false">
+                  <span class="swatch" style="background:#F59E0B"></span>Hazard Slate
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="demo-stage" id="demoStage" data-stage-theme="clean">
+            <iframe
+              id="liveDemoFrame"
+              src="demo-widget.html?embed=1&trade=plumbing&theme=clean"
+              title="ContractorQuote Interactive Live Demo"
+              loading="eager"
+            ></iframe>
+          </div>
+
+          <div class="demo-footnote-bar">
+            <span>You are interacting with the real embedded widget (2 of 5 trades unlocked above). Drag the slider or click <strong>Request Official Booking</strong> to test the live quote slip.</span>
+            <a href="#pricing">Unlock all 5 trades + clean source code →</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Why Static HTML vs. Monthly SaaS -->
+    <section class="content-section" id="compare">
+      <div class="container">
+        <div class="section-head">
+          <h2>Stop paying $49–$199/month for a calculator your clients own once</h2>
+          <p>
+            Static contractor sites lose high-intent leads when homeowners see a bare contact form. ContractorQuote gives you the speed of a custom-built estimator with none of the recurring SaaS overhead.
+          </p>
+        </div>
+
+        <div class="spec-sheet">
+          <div class="table-scroll">
+            <table class="compare-table">
+              <thead>
+                <tr>
+                  <th>Comparison</th>
+                  <th class="col-win">ContractorQuote 5-Trade HTML Bundle</th>
+                  <th>Typical SaaS Quote Widgets</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>1-Year Cost (1 Site)</strong></td>
+                  <td class="col-win tabular">$29 total (one-time)</td>
+                  <td class="tabular">$588 – $2,388 / year</td>
+                </tr>
+                <tr>
+                  <td><strong>Cost for 10 Agency Client Sites</strong></td>
+                  <td class="col-win tabular">$79 total (unlimited clients)</td>
+                  <td class="tabular">$5,880+ / year</td>
+                </tr>
+                <tr>
+                  <td><strong>Server / Database / API Keys</strong></td>
+                  <td class="col-win">None — 100% client-side single HTML file</td>
+                  <td>External account, API limits &amp; vendor lock-in</td>
+                </tr>
+                <tr>
+                  <td><strong>White-Label &amp; Code Ownership</strong></td>
+                  <td class="col-win">Full readable HTML/CSS/JS — zero watermarks</td>
+                  <td>"Powered by" badge unless you upgrade tiers</td>
+                </tr>
+                <tr>
+                  <td><strong>Lead Delivery</strong></td>
+                  <td class="col-win">Instant pre-filled Email, SMS &amp; copyable quote slip</td>
+                  <td>Gated behind monthly CRM plan</td>
+                </tr>
+                <tr>
+                  <td><strong>Platform Support</strong></td>
+                  <td class="col-win">WordPress, Squarespace, Wix, Webflow, Carrd, static HTML</td>
+                  <td>Script injection / platform plugins</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- What's Included: 5 Trades + Plain-English Config -->
+    <section class="content-section" id="whats-included">
+      <div class="container">
+        <div class="section-head">
+          <h2>Five complete local trades in one plain-English config block</h2>
+          <p>
+            Every rate, slider range, urgency fee, deposit percentage, and APR lives in a single clearly commented object at the top of <code>index.html</code>. Edit prices in 2 minutes or duplicate a block to launch a brand-new trade.
+          </p>
+        </div>
+
+        <div class="bundle-split">
+          <div class="spec-sheet">
+            <ul class="ledger-list">
+              <li class="ledger-item">
+                <div class="ledger-trade"><span class="trade-dot"></span>Plumbing</div>
+                <div class="ledger-detail">
+                  <strong>4 services:</strong> Leak Repair, Drain Clearing, Water Heater Swap, Fixture Installation. Includes parts grade tiers, same-day urgent dispatch fees, and camera/valve add-ons.
+                </div>
+              </li>
+              <li class="ledger-item">
+                <div class="ledger-trade"><span class="trade-dot"></span>Roofing</div>
+                <div class="ledger-detail">
+                  <strong>4 services:</strong> Full Roof Replacement (sq ft slider), Leak &amp; Shingle Repair, Seamless Gutters (linear ft), Roof Tune-Up. Includes shingle/metal tiers, roof pitch slope, and emergency tarp rates.
+                </div>
+              </li>
+              <li class="ledger-item">
+                <div class="ledger-trade"><span class="trade-dot"></span>HVAC</div>
+                <div class="ledger-detail">
+                  <strong>4 services:</strong> AC / Heat Pump Install, AC or Furnace Repair, Whole-Home Duct Cleaning, Seasonal Tune-Up. Includes efficiency tiers and smart thermostat / UV purifier add-ons.
+                </div>
+              </li>
+              <li class="ledger-item">
+                <div class="ledger-trade"><span class="trade-dot"></span>Electrical</div>
+                <div class="ledger-detail">
+                  <strong>4 services:</strong> Level 2 EV Charger Install (panel distance slider), 200A Panel Upgrade, Outlets &amp; Dimmers, Recessed LED Lighting. Includes wall-access difficulty and surge/permit extras.
+                </div>
+              </li>
+              <li class="ledger-item">
+                <div class="ledger-trade"><span class="trade-dot"></span>Painting</div>
+                <div class="ledger-detail">
+                  <strong>4 services:</strong> Room Painting, Whole-Home Interior, Kitchen Cabinets (door/drawer count), Trim &amp; Doors. Includes paint finish grade, ceiling height/prep, and ceiling/furniture add-ons.
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <div class="code-window">
+            <div class="code-window-bar">
+              <span>index.html — TRADE_WIDGET_CONFIG</span>
+              <span>NO BUILD STEP</span>
+            </div>
+            <pre><code><span class="tok-k">const</span> TRADE_WIDGET_CONFIG = {
+  <span class="tok-k">defaultTrade</span>: <span class="tok-s">'plumbing'</span>,   <span class="tok-c">// plumbing | roofing | hvac | electrical | painting</span>
+  <span class="tok-k">defaultTheme</span>: <span class="tok-s">'clean'</span>,      <span class="tok-c">// clean | blueprint | slate</span>
+  <span class="tok-k">currency</span>: <span class="tok-s">'$'</span>,              <span class="tok-c">// Change to £, €, C$, A$, etc.</span>
+  <span class="tok-k">depositPercent</span>: <span class="tok-n">25</span>,         <span class="tok-c">// Booking deposit shown on ticket</span>
+  <span class="tok-k">financingApr</span>: <span class="tok-n">7.9</span>,          <span class="tok-c">// Set to 0 for 0% promo financing</span>
+
+  <span class="tok-k">trades</span>: {
+    <span class="tok-k">roofing</span>: {
+      <span class="tok-k">companyName</span>: <span class="tok-s">''</span>,         <span class="tok-c">// Optional: stamp contractor name on slip</span>
+      <span class="tok-k">contactEmail</span>: <span class="tok-s">'estimates@contractor.com'</span>,
+      <span class="tok-k">contactPhone</span>: <span class="tok-s">'+15550100000'</span>,
+      <span class="tok-k">services</span>: [
+        { <span class="tok-k">name</span>: <span class="tok-s">'Full Roof Replacement'</span>, <span class="tok-k">baseMin</span>: <span class="tok-n">1200</span>, <span class="tok-k">perUnitMin</span>: <span class="tok-n">4.10</span> }
+      ]
+    }
+  }
+};</code></pre>
+            <div class="code-caption">
+              Includes a double-clickable <strong>START-HERE.html</strong> setup guide with an interactive embed-code generator and auto-height iframe script for WordPress, Squarespace, Wix, Webflow, and static HTML.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Licensing & Pricing -->
+    <section class="content-section" id="pricing">
+      <div class="container">
+        <div class="section-head">
+          <h2>Simple one-time licensing</h2>
+          <p>
+            Pay once, download the complete ZIP immediately, and keep every file forever.
+          </p>
+        </div>
+
+        <div class="pricing-grid">
+          <!-- Single-Site License -->
+          <div class="tier-sheet">
+            <div class="tier-head">
+              <div>
+                <h3 class="tier-name">Single-Site License</h3>
+                <p class="tier-sub">For one local service business website</p>
+              </div>
+              <span class="tier-tag">1 Website</span>
+            </div>
+
+            <div class="tier-price-row">
+              <span class="tier-price tabular">$29</span>
+              <span class="tier-billing">one-time payment</span>
+            </div>
+
+            <ul class="tier-list">
+              <li>
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><polyline points="20 6 9 17 4 12"/></svg>
+                <span><strong>All 5 trade presets</strong> (Plumbing, Roofing, HVAC, Electrical, Painting)</span>
+              </li>
+              <li>
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><polyline points="20 6 9 17 4 12"/></svg>
+                <span><strong>3 built-in visual themes</strong> (Light Aluminum, Cyanotype, Hazard Slate)</span>
+              </li>
+              <li>
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><polyline points="20 6 9 17 4 12"/></svg>
+                <span><strong>100% white-label</strong> — clean commented HTML/CSS/JS with zero watermarks</span>
+              </li>
+              <li>
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Visual <code>START-HERE.html</code> setup guide + auto-resizing iframe snippet</span>
+              </li>
+              <li>
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Commercial use on <strong>1 business domain</strong></span>
+              </li>
+            </ul>
+
+            <a class="btn-secondary tier-cta" data-buy-link="single" href="#pricing">Get Single-Site License — $29</a>
+          </div>
+
+          <!-- Agency / Freelancer License -->
+          <div class="tier-sheet is-agency">
+            <div class="tier-head">
+              <div>
+                <h3 class="tier-name">Agency / Freelancer License</h3>
+                <p class="tier-sub">For web designers &amp; local-SEO agencies</p>
+              </div>
+              <span class="tier-tag">Unlimited Clients</span>
+            </div>
+
+            <div class="tier-price-row">
+              <span class="tier-price tabular">$79</span>
+              <span class="tier-billing">one-time payment</span>
+            </div>
+
+            <ul class="tier-list">
+              <li>
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><polyline points="20 6 9 17 4 12"/></svg>
+                <span><strong>Everything in Single-Site</strong> — full unminified source code &amp; setup guide</span>
+              </li>
+              <li>
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Install on <strong>unlimited client websites</strong> with zero per-site royalties</span>
+              </li>
+              <li>
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><polyline points="20 6 9 17 4 12"/></svg>
+                <span><strong>Create unlimited custom trades</strong> (fencing, turf, pressure washing, tree care)</span>
+              </li>
+              <li>
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Bundle as a paid add-on inside your client web design packages</span>
+              </li>
+              <li>
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Pays for itself on your very first client site</span>
+              </li>
+            </ul>
+
+            <a class="btn-primary tier-cta" data-buy-link="agency" href="#pricing">Get Agency License — $79</a>
+          </div>
+        </div>
+
+        <div class="bundle-contents-strip">
+          <span><strong>Instant ZIP Download includes:</strong> <code>index.html</code> (5-Trade Widget) · <code>START-HERE.html</code> (Setup Guide &amp; Embed Generator) · <code>LICENSE.txt</code></span>
+          <span>Zero recurring fees · Works offline &amp; on any static host</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="content-section" id="faq">
+      <div class="container">
+        <div class="section-head">
+          <h2>Common questions</h2>
+        </div>
+
+        <div class="faq-sheet">
+          <details open>
+            <summary>How do homeowners send their quote without a backend server?</summary>
+            <div class="faq-body">
+              <p>When a homeowner clicks <strong>Request Official Booking</strong>, the widget builds a formatted quote slip containing their selected service, scope, itemized range, deposit, and optional contact notes. One tap opens their email client (<code>mailto:</code>) or phone messaging app (<code>sms:</code>) pre-addressed to the contractor, or copies the slip straight to their clipboard.</p>
+            </div>
+          </details>
+          <details>
+            <summary>Will this work on WordPress, Squarespace, Wix, or Webflow?</summary>
+            <div class="faq-body">
+              <p>Yes. Upload <code>index.html</code> to your hosting (or free static hosting like Cloudflare Pages or Netlify) and paste the generated <code>&lt;iframe&gt;</code> snippet into any Custom HTML or Embed block. Locking the URL with <code>?embed=1&amp;trade=roofing&amp;theme=clean</code> strips all preview bars, and the included 7-line resize script automatically adjusts iframe height so there are never double scrollbars.</p>
+            </div>
+          </details>
+          <details>
+            <summary>Can I change the currency, financing APR, or add a different trade?</summary>
+            <div class="faq-body">
+              <p>Yes. Change <code>currency</code> (e.g., <code>£</code>, <code>€</code>, <code>A$</code>, <code>C$</code>) and <code>locale</code> at the top of <code>TRADE_WIDGET_CONFIG</code>, set <code>financingApr: 0</code> for 0% promo plans, or duplicate any trade object to spin up landscaping, fencing, solar, or cleaning estimators in minutes.</p>
+            </div>
+          </details>
+          <details>
+            <summary>Are the sample prices accurate for every city?</summary>
+            <div class="faq-body">
+              <p>The pre-loaded numbers are realistic US residential ballpark placeholders so the widget works immediately out of the box. You should update each trade's <code>baseMin</code>, <code>baseMax</code>, and <code>perUnit</code> rates in <code>TRADE_WIDGET_CONFIG</code> to match local contractor pricing before going live.</p>
+            </div>
+          </details>
+          <details>
+            <summary>What is the difference between the Single-Site and Agency licenses?</summary>
+            <div class="faq-body">
+              <p>Both tiers give you the exact same 5-trade source bundle. Single-Site covers one business website; Agency covers unlimited client installations and custom trade builds (you just cannot resell the widget itself as a standalone template on marketplaces).</p>
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span><strong>ContractorQuote</strong> — Self-contained HTML quote calculator for local home service websites.</span>
+      <span>Built for zero-backend static deployment · No monthly fees</span>
+    </div>
+  </footer>
+
+  <script>
+    /* ============================================================================
+       === STEP 3 CONFIG: PASTE YOUR GUMROAD CHECKOUT URLS HERE ===================
+       ============================================================================ */
+    const BUY_LINKS = {
+      single: 'https://gumroad.com/l/YOUR-CONTRACTORQUOTE-SINGLE',
+      agency: 'https://gumroad.com/l/YOUR-CONTRACTORQUOTE-AGENCY'
+    };
+
+    (function () {
+      'use strict';
+
+      // Wire up Buy buttons automatically when real URLs are pasted
+      document.querySelectorAll('[data-buy-link]').forEach(link => {
+        const tier = link.dataset.buyLink;
+        const url = BUY_LINKS[tier];
+        if (url && !url.includes('YOUR-CONTRACTORQUOTE')) {
+          link.href = url;
+          link.target = '_blank';
+          link.rel = 'noopener noreferrer';
+        }
+      });
+
+      const frame = document.getElementById('liveDemoFrame');
+      const stage = document.getElementById('demoStage');
+      const tradeBtns = document.querySelectorAll('[data-demo-trade]');
+      const themeBtns = document.querySelectorAll('[data-demo-theme]');
+
+      let currentTrade = 'plumbing';
+      let currentTheme = 'clean';
+
+      function syncDemo() {
+        stage.setAttribute('data-stage-theme', currentTheme);
+        if (frame.contentWindow) {
+          frame.contentWindow.postMessage(
+            { type: 'TRADE_QUOTE_SET', trade: currentTrade, theme: currentTheme },
+            '*'
+          );
+        }
+      }
+
+      tradeBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          currentTrade = btn.dataset.demoTrade;
+          tradeBtns.forEach(b => b.setAttribute('aria-pressed', String(b === btn)));
+          syncDemo();
+        });
+      });
+
+      themeBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          currentTheme = btn.dataset.demoTheme;
+          themeBtns.forEach(b => b.setAttribute('aria-pressed', String(b === btn)));
+          syncDemo();
+        });
+      });
+
+      frame.addEventListener('load', syncDemo);
+
+      // Auto-resize embedded iframe cleanly via postMessage
+      window.addEventListener('message', function (e) {
+        if (e.data && e.data.type === 'TRADE_QUOTE_RESIZE') {
+          const h = Math.max(640, Number(e.data.height) + 8);
+          frame.style.height = h + 'px';
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

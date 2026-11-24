@@ -1,0 +1,3046 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="clean">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ContractorQuote Interactive Demo (Plumbing &amp; Roofing)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800;900&display=swap" rel="stylesheet">
+  <style>
+    /* ==========================================================================
+       1. FIELD CONSOLE & THERMAL PAPER TOKEN SYSTEM (3 THEMES)
+       ========================================================================== */
+    :root {
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-display: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+      /* Theme 1: Light Aluminum (Default Daylight Console) */
+      --room-bg: #EEF2F6;
+      --room-glow: rgba(29, 78, 216, 0.06);
+      --room-pattern: radial-gradient(rgba(15, 23, 42, 0.08) 1px, transparent 1px);
+
+      --chassis-frame: #FFFFFF;
+      --chassis-metal: #F1F5F9;
+      --chassis-metal-top: #F8FAFC;
+      --chassis-border: #CBD5E1;
+      --chassis-highlight: #94A3B8;
+      --chassis-inner-glint: rgba(255, 255, 255, 0.9);
+      --bay-recessed: #F8FAFC;
+      --bay-hover: #F1F5F9;
+      --bay-border: #DCE4EE;
+      --feeder-bg: #E7EDF4;
+
+      --text-glow: #0F172A;
+      --text-dim: #334155;
+      --text-muted: #475569;
+
+      --accent: #1D4ED8;
+      --accent-hover: #1E40AF;
+      --accent-active-bg: #EFF6FF;
+      --accent-badge-bg: #DBEAFE;
+      --accent-badge-text: #1E3A8A;
+      --accent-text: #FFFFFF;
+
+      --tag-text: #1D4ED8;
+      --tag-bg: #EFF6FF;
+      --tag-border: #BFDBFE;
+      --delta-text: #1D4ED8;
+
+      --lcd-bg: #0F172A;
+      --lcd-border: #1E293B;
+      --lcd-flash-bg: #1E293B;
+      --lcd-flash-border: #38BDF8;
+      --lcd-text: #38BDF8;
+      --lcd-unit: #CBD5E1;
+
+      --slider-rail: #DCE4EE;
+      --slider-thumb: #FFFFFF;
+      --status-led: #059669;
+      --status-led-ring: rgba(5, 150, 105, 0.25);
+
+      /* Thermal Paper Ticket */
+      --ticket-bg: #FAF8F4;
+      --ticket-border: #DDD7CB;
+      --ticket-text: #0F172A;
+      --ticket-secondary: #334155;
+      --ticket-muted: #475569;
+      --ticket-rule: #D6CFC2;
+      --ticket-accent: #1D4ED8;
+      --ticket-accent-hover: #1E40AF;
+      --ticket-btn-text: #FFFFFF;
+      --ticket-accent-soft: #EFF6FF;
+      --ticket-accent-border: rgba(29, 78, 216, 0.28);
+      --ticket-focus-ring: rgba(29, 78, 216, 0.22);
+
+      --seal-ink: #1D4ED8;
+      --seal-bg: rgba(29, 78, 216, 0.04);
+      --seal-border: rgba(29, 78, 216, 0.35);
+
+      --shadow-chassis: 0 2px 4px rgba(15, 23, 42, 0.05), 0 22px 46px -14px rgba(15, 23, 42, 0.14);
+      --shadow-paper: 0 12px 30px rgba(15, 23, 42, 0.14);
+      --radius-bezel: 22px;
+      --radius-bay: 10px;
+      --radius-key: 8px;
+    }
+
+    /* Theme 2: Architectural Cyanotype Blueprint */
+    [data-theme="blueprint"] {
+      --room-bg: #06111D;
+      --room-glow: rgba(56, 189, 248, 0.09);
+      --room-pattern: radial-gradient(#163252 1px, transparent 1px);
+
+      --chassis-frame: #0F263E;
+      --chassis-metal: #153455;
+      --chassis-metal-top: #1B4169;
+      --chassis-border: #255384;
+      --chassis-highlight: #3A75B5;
+      --chassis-inner-glint: rgba(255, 255, 255, 0.08);
+      --bay-recessed: #0A192B;
+      --bay-hover: #10243C;
+      --bay-border: #1C446E;
+      --feeder-bg: #081524;
+
+      --text-glow: #F0F6FC;
+      --text-dim: #D0E1F4;
+      --text-muted: #9AB7D9;
+
+      --accent: #D46137;
+      --accent-hover: #B54B25;
+      --accent-active-bg: #261B1A;
+      --accent-badge-bg: rgba(212, 97, 55, 0.24);
+      --accent-badge-text: #FFDCD0;
+      --accent-text: #FFFFFF;
+
+      --tag-text: #7DD3FC;
+      --tag-bg: rgba(56, 189, 248, 0.12);
+      --tag-border: rgba(56, 189, 248, 0.32);
+      --delta-text: #7DD3FC;
+
+      --lcd-bg: #06101B;
+      --lcd-border: #38BDF8;
+      --lcd-flash-bg: #0D2740;
+      --lcd-flash-border: #7DD3FC;
+      --lcd-text: #38BDF8;
+      --lcd-unit: #9AB7D9;
+
+      --slider-rail: #173454;
+      --slider-thumb: #F8FAFC;
+      --status-led: #38BDF8;
+      --status-led-ring: rgba(56, 189, 248, 0.35);
+
+      --ticket-bg: #F7F3EA;
+      --ticket-border: #D8D0BF;
+      --ticket-text: #0C1E34;
+      --ticket-secondary: #243E5E;
+      --ticket-muted: #455E7C;
+      --ticket-rule: #CEC4AF;
+      --ticket-accent: #B54B25;
+      --ticket-accent-hover: #963B1A;
+      --ticket-btn-text: #FFFFFF;
+      --ticket-accent-soft: #FDF2ED;
+      --ticket-accent-border: rgba(181, 75, 37, 0.3);
+      --ticket-focus-ring: rgba(181, 75, 37, 0.24);
+
+      --seal-ink: #B54B25;
+      --seal-bg: rgba(181, 75, 37, 0.05);
+      --seal-border: rgba(181, 75, 37, 0.4);
+
+      --shadow-chassis: 0 4px 8px rgba(0, 0, 0, 0.45), 0 24px 50px -12px rgba(0, 0, 0, 0.78);
+      --shadow-paper: 0 12px 36px rgba(0, 0, 0, 0.38);
+    }
+
+    /* Theme 3: High-Contrast Hazard Slate */
+    [data-theme="slate"] {
+      --room-bg: #06080B;
+      --room-glow: rgba(245, 158, 11, 0.08);
+      --room-pattern: radial-gradient(#1E2530 1px, transparent 1px);
+
+      --chassis-frame: #12161E;
+      --chassis-metal: #1B212D;
+      --chassis-metal-top: #232B3A;
+      --chassis-border: #2E3849;
+      --chassis-highlight: #4E5D75;
+      --chassis-inner-glint: rgba(255, 255, 255, 0.07);
+      --bay-recessed: #0B0E14;
+      --bay-hover: #141A24;
+      --bay-border: #232C3B;
+      --feeder-bg: #080A0F;
+
+      --text-glow: #F8FAFC;
+      --text-dim: #E2E8F0;
+      --text-muted: #A3B1C2;
+
+      --accent: #F59E0B;
+      --accent-hover: #D97706;
+      --accent-active-bg: #261C0C;
+      --accent-badge-bg: rgba(245, 158, 11, 0.22);
+      --accent-badge-text: #FDE68A;
+      --accent-text: #0F172A;
+
+      --tag-text: #FBBF24;
+      --tag-bg: rgba(245, 158, 11, 0.13);
+      --tag-border: rgba(245, 158, 11, 0.34);
+      --delta-text: #FBBF24;
+
+      --lcd-bg: #07090D;
+      --lcd-border: #F59E0B;
+      --lcd-flash-bg: #241908;
+      --lcd-flash-border: #FCD34D;
+      --lcd-text: #FBBF24;
+      --lcd-unit: #A3B1C2;
+
+      --slider-rail: #232B39;
+      --slider-thumb: #F8FAFC;
+      --status-led: #F59E0B;
+      --status-led-ring: rgba(245, 158, 11, 0.35);
+
+      --ticket-bg: #FFFDF5;
+      --ticket-border: #E6DFC8;
+      --ticket-text: #1A1916;
+      --ticket-secondary: #36322A;
+      --ticket-muted: #524B3F;
+      --ticket-rule: #DAD0B6;
+      --ticket-accent: #B45309;
+      --ticket-accent-hover: #92400E;
+      --ticket-btn-text: #FFFFFF;
+      --ticket-accent-soft: #FEF3C7;
+      --ticket-accent-border: rgba(180, 83, 9, 0.32);
+      --ticket-focus-ring: rgba(180, 83, 9, 0.24);
+
+      --seal-ink: #B45309;
+      --seal-bg: rgba(180, 83, 9, 0.05);
+      --seal-border: rgba(180, 83, 9, 0.4);
+
+      --shadow-chassis: 0 4px 8px rgba(0, 0, 0, 0.5), 0 24px 50px -12px rgba(0, 0, 0, 0.85);
+      --shadow-paper: 0 12px 36px rgba(0, 0, 0, 0.42);
+    }
+
+    /* ==========================================================================
+       2. BROWSER RESET & ENVIRONMENT
+       ========================================================================== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    ::selection {
+      background: var(--accent);
+      color: var(--accent-text);
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bay-recessed);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--chassis-border);
+      border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--chassis-highlight);
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: var(--font-sans);
+      background-color: var(--room-bg);
+      background-image: radial-gradient(circle at 50% 0%, var(--room-glow), transparent 60%), var(--room-pattern);
+      background-size: auto, 24px 24px;
+      color: var(--text-dim);
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.5;
+      caret-color: var(--accent);
+      min-height: 100vh;
+      transition: background-color 0.22s ease, color 0.22s ease;
+    }
+
+    button, input, select {
+      font-family: inherit;
+    }
+
+    .tabular {
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ==========================================================================
+       3. WORKSTATION CHASSIS SHELL & EMBED MODE
+       ========================================================================== */
+    .field-workstation-wrap {
+      max-width: 1180px;
+      margin: 24px auto 52px;
+      padding: 0 16px;
+    }
+
+    body.is-embed {
+      background: transparent;
+      background-image: none;
+      min-height: 0;
+    }
+
+    body.is-embed .field-workstation-wrap {
+      max-width: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    body.is-embed .chassis-deck-bar,
+    body.is-embed .chassis-stamp-footer {
+      display: none !important;
+    }
+
+    body.is-embed .chassis-unit {
+      border-radius: 14px;
+      box-shadow: none;
+    }
+
+    .embed-exit-pill {
+      display: none;
+      position: fixed;
+      bottom: 18px;
+      right: 18px;
+      z-index: 100;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      border: 1.5px solid var(--chassis-border);
+      background: var(--chassis-frame);
+      color: var(--text-glow);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.24);
+      transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.08s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .embed-exit-pill:hover {
+      background: var(--chassis-metal);
+      border-color: var(--chassis-highlight);
+    }
+
+    .embed-exit-pill:active {
+      transform: translateY(1.5px);
+    }
+
+    body.is-embed:not(.is-locked-embed) .embed-exit-pill {
+      display: inline-flex;
+    }
+
+    /* ==========================================================================
+       4. TOP BUYER PREVIEW & CHANNEL DECK BAR
+       ========================================================================== */
+    .chassis-deck-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 14px;
+      margin-bottom: 14px;
+      background: var(--chassis-frame);
+      border: 1.5px solid var(--chassis-border);
+      border-radius: 14px;
+      box-shadow: 0 2px 10px rgba(15, 23, 42, 0.06);
+    }
+
+    .deck-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .deck-tag {
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      padding: 4px 8px;
+      border-radius: 5px;
+      background: var(--bay-recessed);
+      border: 1px solid var(--bay-border);
+    }
+
+    .rack-switch-group {
+      display: inline-flex;
+      flex-wrap: wrap;
+      background: var(--bay-recessed);
+      border: 1px solid var(--bay-border);
+      border-radius: 9px;
+      padding: 3px;
+      gap: 2px;
+    }
+
+    .rack-switch-btn {
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 7px;
+      cursor: pointer;
+      transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease, transform 0.08s cubic-bezier(0.16, 1, 0.3, 1);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 34px;
+    }
+
+    .rack-switch-btn:hover {
+      color: var(--text-glow);
+    }
+
+    .rack-switch-btn:active {
+      transform: translateY(1px);
+    }
+
+    .rack-switch-btn[aria-pressed="true"] {
+      background: var(--chassis-frame);
+      color: var(--text-glow);
+      border-color: var(--chassis-border);
+      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.12);
+      font-weight: 700;
+    }
+
+    .theme-pip {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      border: 1px solid rgba(15, 23, 42, 0.25);
+      flex-shrink: 0;
+    }
+
+    .deck-action-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 13px;
+      border-radius: 8px;
+      border: 1px solid var(--chassis-border);
+      background: var(--chassis-metal);
+      color: var(--text-glow);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      min-height: 36px;
+      transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.08s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .deck-action-btn:hover {
+      background: var(--bay-hover);
+      border-color: var(--chassis-highlight);
+    }
+
+    .deck-action-btn:active {
+      transform: translateY(1px);
+    }
+
+    /* ==========================================================================
+       5. MAIN HARDWARE CHASSIS CONSOLE
+       ========================================================================== */
+    .chassis-unit {
+      background: var(--chassis-frame);
+      border: 2px solid var(--chassis-border);
+      border-radius: var(--radius-bezel);
+      box-shadow: var(--shadow-chassis), inset 0 1px 0 var(--chassis-inner-glint);
+      overflow: hidden;
+    }
+
+    .bezel-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 22px 28px;
+      background: linear-gradient(180deg, var(--chassis-metal-top) 0%, var(--chassis-metal) 100%);
+      border-bottom: 2px solid var(--chassis-border);
+    }
+
+    .bezel-brand {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .bezel-icon-mark {
+      width: 48px;
+      height: 48px;
+      border-radius: 11px;
+      background: var(--accent-active-bg);
+      border: 1.5px solid var(--accent);
+      color: var(--accent);
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+    }
+
+    .bezel-title {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin: 0;
+      line-height: 1.15;
+      color: var(--text-glow);
+    }
+
+    .bezel-sub {
+      margin: 3px 0 0;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .bezel-telemetry {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 7px 14px;
+      border-radius: 999px;
+      background: var(--chassis-frame);
+      border: 1px solid var(--chassis-border);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-dim);
+    }
+
+    .led-indicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--status-led);
+      box-shadow: 0 0 0 3px var(--status-led-ring);
+    }
+
+    .chassis-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.38fr) minmax(360px, 0.98fr);
+      align-items: stretch;
+    }
+
+    /* --------------------------------------------------------------------------
+       LEFT WING: HARDWARE CONTROL CONSOLE
+       -------------------------------------------------------------------------- */
+    .console-pane {
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+      background: var(--chassis-frame);
+    }
+
+    .instrument-bay {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .bay-header-strip {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 10px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--bay-border);
+    }
+
+    .bay-legend {
+      font-family: var(--font-display);
+      font-size: 15.5px;
+      font-weight: 700;
+      color: var(--text-glow);
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      letter-spacing: -0.01em;
+    }
+
+    .bay-tag {
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--tag-text);
+      background: var(--tag-bg);
+      border: 1px solid var(--tag-border);
+      padding: 2px 7px;
+      border-radius: 5px;
+      flex-shrink: 0;
+    }
+
+    /* Service Channel Tiles (Constant 2px border prevents layout shift) */
+    .channel-rack-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .channel-tile {
+      position: relative;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      padding: 15px 16px;
+      border-radius: var(--radius-bay);
+      border: 2px solid var(--bay-border);
+      background: var(--bay-recessed);
+      color: var(--text-dim);
+      cursor: pointer;
+      min-height: 52px;
+      transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.08s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .channel-tile:hover {
+      border-color: var(--chassis-highlight);
+      background: var(--bay-hover);
+    }
+
+    .channel-tile:active {
+      transform: translateY(1.5px);
+    }
+
+    .channel-tile[aria-pressed="true"] {
+      border-color: var(--accent);
+      background: var(--accent-active-bg);
+    }
+
+    .channel-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      width: 100%;
+    }
+
+    .channel-icon-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .channel-led-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--chassis-border);
+      transition: background-color 0.15s ease;
+      flex-shrink: 0;
+    }
+
+    .channel-tile[aria-pressed="true"] .channel-led-dot {
+      background: var(--accent);
+      animation: ledPulse 0.16s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes ledPulse {
+      0% { transform: scale(0.75); }
+      100% { transform: scale(1); }
+    }
+
+    .channel-badge {
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: var(--chassis-metal);
+      color: var(--text-muted);
+      border: 1px solid var(--chassis-border);
+      white-space: nowrap;
+    }
+
+    .channel-tile[aria-pressed="true"] .channel-badge {
+      background: var(--accent-badge-bg);
+      color: var(--accent-badge-text);
+      border-color: var(--accent);
+    }
+
+    .channel-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-glow);
+      line-height: 1.25;
+    }
+
+    .channel-desc {
+      font-size: 13.5px;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    /* Calibrated Gauge Instrument Bay */
+    .gauge-instrument-strip {
+      padding: 8px 0 4px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .gauge-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .gauge-title-col {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .gauge-label-text {
+      font-size: 14.5px;
+      font-weight: 700;
+      color: var(--text-glow);
+    }
+
+    .gauge-sub-hint {
+      font-size: 12.5px;
+      color: var(--text-muted);
+    }
+
+    .gauge-lcd-assembly {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 6px;
+      padding: 7px 14px;
+      border-radius: 8px;
+      background: var(--lcd-bg);
+      border: 1.5px solid var(--lcd-border);
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.35);
+      transition: border-color 0.15s ease, background-color 0.15s ease;
+    }
+
+    .gauge-lcd-assembly.is-flashing {
+      animation: lcdPhosphorFlash 0.18s ease;
+    }
+
+    @keyframes lcdPhosphorFlash {
+      0% {
+        background: var(--lcd-flash-bg);
+        border-color: var(--lcd-flash-border);
+      }
+      100% {
+        background: var(--lcd-bg);
+        border-color: var(--lcd-border);
+      }
+    }
+
+    .gauge-lcd-pill {
+      font-family: var(--font-mono);
+      color: var(--lcd-text);
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    .gauge-lcd-unit {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--lcd-unit);
+      text-transform: uppercase;
+    }
+
+    .stepper-range-assembly {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .physical-stepper-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-key);
+      border: 1.5px solid var(--chassis-border);
+      background: var(--chassis-metal);
+      color: var(--text-glow);
+      font-size: 20px;
+      font-weight: 700;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      box-shadow: 0 2px 4px rgba(15, 23, 42, 0.08);
+      transition: background-color 0.12s ease, border-color 0.12s ease, opacity 0.15s ease, transform 0.08s cubic-bezier(0.16, 1, 0.3, 1);
+      user-select: none;
+    }
+
+    .physical-stepper-btn:hover:not(:disabled) {
+      background: var(--bay-hover);
+      border-color: var(--chassis-highlight);
+    }
+
+    .physical-stepper-btn:active:not(:disabled) {
+      transform: translateY(1.5px);
+    }
+
+    .physical-stepper-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .slider-track-wrap {
+      flex: 1;
+      padding: 6px 0;
+    }
+
+    input[type="range"].trade-slider {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 10px;
+      border-radius: 999px;
+      background: linear-gradient(
+        to right,
+        var(--accent) 0%,
+        var(--accent) var(--pct, 50%),
+        var(--slider-rail) var(--pct, 50%),
+        var(--slider-rail) 100%
+      );
+      outline: none;
+      cursor: pointer;
+      border: 1px solid var(--bay-border);
+    }
+
+    input[type="range"].trade-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--slider-thumb);
+      border: 3px solid var(--accent);
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.25);
+      cursor: grab;
+      transition: transform 0.12s ease;
+    }
+
+    input[type="range"].trade-slider::-webkit-slider-thumb:active {
+      cursor: grabbing;
+      transform: scale(1.12);
+    }
+
+    input[type="range"].trade-slider::-moz-range-thumb {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--slider-thumb);
+      border: 3px solid var(--accent);
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.25);
+      cursor: grab;
+    }
+
+    .gauge-ruler-ticks {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-muted);
+      padding: 0 4px;
+    }
+
+    .gauge-advisory {
+      font-size: 13.5px;
+      color: var(--text-muted);
+      margin: 0;
+      line-height: 1.45;
+    }
+
+    /* Modifier Switchboard Grid (Constant 2px border) */
+    .switchboard-grid {
+      display: grid;
+      gap: 10px;
+    }
+
+    .switchboard-grid.cols-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .switchboard-grid.cols-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .rocker-switch-tile {
+      text-align: left;
+      padding: 13px 14px;
+      border-radius: var(--radius-bay);
+      border: 2px solid var(--bay-border);
+      background: var(--bay-recessed);
+      color: var(--text-dim);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-height: 50px;
+      transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.08s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .rocker-switch-tile:hover {
+      border-color: var(--chassis-highlight);
+      background: var(--bay-hover);
+    }
+
+    .rocker-switch-tile:active {
+      transform: translateY(1.5px);
+    }
+
+    .rocker-switch-tile[aria-pressed="true"] {
+      border-color: var(--accent);
+      background: var(--accent-active-bg);
+    }
+
+    .rocker-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-glow);
+    }
+
+    .rocker-desc {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      line-height: 1.35;
+    }
+
+    .rocker-delta {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--delta-text);
+      margin-top: 3px;
+    }
+
+    /* Accessory Toggle Racks (Constant 2px border) */
+    .accessory-switch-rack {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .breaker-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 9px 14px;
+      border-radius: var(--radius-bay);
+      border: 2px solid var(--bay-border);
+      background: var(--bay-recessed);
+      color: var(--text-dim);
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      min-height: 44px;
+      transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.08s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .breaker-chip:hover {
+      border-color: var(--chassis-highlight);
+      background: var(--bay-hover);
+    }
+
+    .breaker-chip:active {
+      transform: translateY(1.5px);
+    }
+
+    .breaker-chip[aria-pressed="true"] {
+      border-color: var(--accent);
+      background: var(--accent-active-bg);
+    }
+
+    .breaker-led {
+      width: 18px;
+      height: 18px;
+      border-radius: 4px;
+      border: 1.5px solid var(--chassis-highlight);
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      color: transparent;
+      background: var(--chassis-frame);
+      transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+    }
+
+    .breaker-chip[aria-pressed="true"] .breaker-led {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--accent-text);
+      animation: breakerSnap 0.14s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes breakerSnap {
+      0% { transform: scale(0.7); }
+      100% { transform: scale(1); }
+    }
+
+    .breaker-price {
+      font-family: var(--font-mono);
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--delta-text);
+    }
+
+    /* --------------------------------------------------------------------------
+       RIGHT WING: THERMAL PAPER TICKET PRINT ENGINE
+       -------------------------------------------------------------------------- */
+    .printer-feeder-wing {
+      background: var(--feeder-bg);
+      border-left: 2px solid var(--chassis-border);
+      padding: 24px 22px 30px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .feeder-telemetry-strip {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 0 4px 8px;
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--text-muted);
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+
+    .feeder-status-lead {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .feeder-pip {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--status-led);
+      flex-shrink: 0;
+      box-shadow: 0 0 0 2.5px var(--status-led-ring);
+    }
+
+    .feeder-tag {
+      font-size: 11.5px;
+      color: var(--tag-text);
+      background: var(--tag-bg);
+      padding: 1px 6px;
+      border-radius: 4px;
+      border: 1px solid var(--tag-border);
+    }
+
+    .feeder-mouth-slot {
+      height: 14px;
+      background: linear-gradient(180deg, #334155 0%, #0F172A 40%, #020617 72%, #1E293B 100%);
+      border: 2px solid var(--chassis-border);
+      border-radius: 6px;
+      box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.75);
+      margin-bottom: -7px;
+      position: relative;
+      z-index: 10;
+    }
+
+    .thermal-paper-slip {
+      background-color: var(--ticket-bg);
+      background-image: linear-gradient(rgba(0, 0, 0, 0.012) 1px, transparent 1px);
+      background-size: 100% 3px;
+      color: var(--ticket-text);
+      padding: 28px 22px 44px;
+      border: 1px solid var(--ticket-border);
+      border-radius: 4px 4px 0 0;
+      box-shadow: var(--shadow-paper);
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      position: relative;
+      clip-path: polygon(
+        0% 0%, 100% 0%, 100% calc(100% - 10px),
+        98% 100%, 96% calc(100% - 10px), 94% 100%, 92% calc(100% - 10px),
+        90% 100%, 88% calc(100% - 10px), 86% 100%, 84% calc(100% - 10px),
+        82% 100%, 80% calc(100% - 10px), 78% 100%, 76% calc(100% - 10px),
+        74% 100%, 72% calc(100% - 10px), 70% 100%, 68% calc(100% - 10px),
+        66% 100%, 64% calc(100% - 10px), 62% 100%, 60% calc(100% - 10px),
+        58% 100%, 56% calc(100% - 10px), 54% 100%, 52% calc(100% - 10px),
+        50% 100%, 48% calc(100% - 10px), 46% 100%, 44% calc(100% - 10px),
+        42% 100%, 40% calc(100% - 10px), 38% 100%, 36% calc(100% - 10px),
+        34% 100%, 32% calc(100% - 10px), 30% 100%, 28% calc(100% - 10px),
+        26% 100%, 24% calc(100% - 10px), 22% 100%, 20% calc(100% - 10px),
+        18% 100%, 16% calc(100% - 10px), 14% 100%, 12% calc(100% - 10px),
+        10% 100%, 8% calc(100% - 10px), 6% 100%, 4% calc(100% - 10px),
+        2% 100%, 0% calc(100% - 10px)
+      );
+    }
+
+    .thermal-paper-slip.is-feeding {
+      animation: ticketMicroFeed 0.16s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .thermal-paper-slip.is-printing {
+      animation: ticketEjectPrint 0.26s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes ticketMicroFeed {
+      0% { transform: translateY(-3px); }
+      100% { transform: translateY(0); }
+    }
+
+    @keyframes ticketEjectPrint {
+      0% { opacity: 0.9; transform: translateY(-7px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .ticket-header-rule {
+      border-bottom: 2px dashed var(--ticket-rule);
+      padding-bottom: 14px;
+      text-align: center;
+    }
+
+    .ticket-contractor-stamp {
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      color: var(--ticket-text);
+      margin: 0;
+    }
+
+    .ticket-meta-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-top: 6px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--ticket-muted);
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .ticket-ref-box {
+      font-weight: 700;
+      color: var(--ticket-accent);
+      background: var(--ticket-accent-soft);
+      padding: 2px 7px;
+      border-radius: 3px;
+      border: 1px solid var(--ticket-accent-border);
+    }
+
+    .ticket-estimate-section {
+      border-top: 2px dashed var(--ticket-rule);
+      border-bottom: 2px dashed var(--ticket-rule);
+      padding: 16px 0;
+      text-align: center;
+    }
+
+    .ticket-hero-range {
+      font-family: var(--font-display);
+      font-size: 33px;
+      font-weight: 900;
+      color: var(--ticket-accent);
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      display: inline-block;
+    }
+
+    .ticket-hero-range.is-updating {
+      animation: odometerTick 0.16s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes odometerTick {
+      0% { opacity: 0.55; transform: translateY(-2px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .ticket-scope-summary {
+      font-size: 13px;
+      color: var(--ticket-muted);
+      margin: 6px 0 0;
+      line-height: 1.4;
+    }
+
+    .ticket-items-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .ticket-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 13.5px;
+      padding-bottom: 6px;
+      border-bottom: 1px dotted var(--ticket-rule);
+    }
+
+    .ticket-row-desc {
+      color: var(--ticket-secondary);
+      line-height: 1.35;
+    }
+
+    .ticket-row-desc strong {
+      color: var(--ticket-text);
+      font-weight: 600;
+    }
+
+    .ticket-row-val {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      color: var(--ticket-text);
+      white-space: nowrap;
+      font-size: 13px;
+    }
+
+    .ticket-seal-stamp {
+      border: 1.5px dashed var(--seal-border);
+      background: var(--seal-bg);
+      border-radius: 5px;
+      padding: 10px 14px;
+      text-align: center;
+      color: var(--seal-ink);
+      font-family: var(--font-mono);
+      transform: rotate(-0.8deg);
+      user-select: none;
+      margin: 2px 0;
+    }
+
+    .ticket-seal-stamp.is-stamping {
+      animation: sealStamp 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes sealStamp {
+      0% { transform: scale(1.04) rotate(-1.6deg); opacity: 0.65; }
+      100% { transform: scale(1) rotate(-0.8deg); opacity: 1; }
+    }
+
+    .seal-mark {
+      display: block;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+    }
+
+    .seal-guarantee {
+      display: block;
+      font-size: 11.5px;
+      font-weight: 600;
+      margin-top: 2px;
+    }
+
+    .seal-audit {
+      display: inline-block;
+      margin-top: 5px;
+      font-size: 11.5px;
+      font-weight: 700;
+      background: rgba(255, 255, 255, 0.85);
+      padding: 1px 7px;
+      border-radius: 3px;
+      border: 1px solid var(--seal-border);
+    }
+
+    .ticket-finance-section {
+      border-top: 1px dashed var(--ticket-rule);
+      padding-top: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .stamp-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .stamp-label {
+      font-size: 13px;
+      color: var(--ticket-muted);
+    }
+
+    .stamp-label strong {
+      display: block;
+      font-size: 14px;
+      color: var(--ticket-text);
+    }
+
+    .stamp-value {
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--ticket-accent);
+      white-space: nowrap;
+    }
+
+    .stamp-divider {
+      height: 1px;
+      background: var(--ticket-rule);
+    }
+
+    .term-button-strip {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .term-stamp-btn {
+      flex: 1;
+      min-width: 52px;
+      padding: 7px 8px;
+      border-radius: 5px;
+      border: 1px solid var(--ticket-rule);
+      background: #FFFFFF;
+      color: var(--ticket-muted);
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+      text-align: center;
+      font-family: var(--font-mono);
+    }
+
+    .term-stamp-btn:hover {
+      color: var(--ticket-text);
+      border-color: var(--ticket-secondary);
+    }
+
+    .term-stamp-btn[aria-pressed="true"] {
+      background: var(--ticket-accent);
+      border-color: var(--ticket-accent);
+      color: var(--ticket-btn-text);
+    }
+
+    .ticket-disclaimer-note {
+      font-size: 12px;
+      color: var(--ticket-muted);
+      margin: 0;
+      line-height: 1.4;
+    }
+
+    .btn-tear-dispatch {
+      width: 100%;
+      padding: 14px 18px;
+      border-radius: 8px;
+      border: 0;
+      background: var(--ticket-accent);
+      color: var(--ticket-btn-text);
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 48px;
+      transition: background-color 0.15s ease, transform 0.08s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.16);
+    }
+
+    .btn-tear-dispatch:hover {
+      background: var(--ticket-accent-hover);
+    }
+
+    .btn-tear-dispatch:active {
+      transform: translateY(1.5px);
+    }
+
+    /* Unified accessible keyboard focus rings */
+    .btn-tear-dispatch:focus-visible,
+    .btn-ticket-send:focus-visible,
+    .term-stamp-btn:focus-visible,
+    .channel-tile:focus-visible,
+    .rocker-switch-tile:focus-visible,
+    .breaker-chip:focus-visible,
+    .physical-stepper-btn:focus-visible,
+    .rack-switch-btn:focus-visible,
+    .deck-action-btn:focus-visible,
+    .embed-exit-pill:focus-visible,
+    input[type="range"].trade-slider:focus-visible {
+      outline: 2.5px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    /* Zero-Backend Dispatch Drawer */
+    .ticket-drawer {
+      display: grid;
+      grid-template-rows: 0fr;
+      overflow: hidden;
+      padding-top: 0;
+      border-top: 1px dashed transparent;
+      transition: grid-template-rows 0.24s cubic-bezier(0.16, 1, 0.3, 1),
+                  padding-top 0.24s cubic-bezier(0.16, 1, 0.3, 1),
+                  border-top-color 0.2s ease;
+    }
+
+    .ticket-drawer.is-open {
+      grid-template-rows: 1fr;
+      padding-top: 14px;
+      border-top-color: var(--ticket-rule);
+    }
+
+    .ticket-drawer-content {
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      opacity: 0;
+      transform: translateY(-6px);
+      transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1) 0.04s,
+                  transform 0.22s cubic-bezier(0.16, 1, 0.3, 1) 0.04s;
+    }
+
+    .ticket-drawer.is-open .ticket-drawer-content {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .drawer-header-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .drawer-title-mono {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--ticket-text);
+      text-transform: uppercase;
+      margin: 0;
+    }
+
+    .drawer-badge-green {
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #065F46;
+      background: #D1FAE5;
+      padding: 2px 7px;
+      border-radius: 4px;
+      border: 1px solid #A7F3D0;
+      text-transform: uppercase;
+    }
+
+    .drawer-explanatory-note {
+      font-size: 13px;
+      color: var(--ticket-muted);
+      margin: 0;
+      line-height: 1.45;
+    }
+
+    .ticket-input-pair {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .ticket-field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .field-label {
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--ticket-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+
+    .ticket-field {
+      width: 100%;
+      padding: 9px 11px;
+      border-radius: 5px;
+      border: 1px solid var(--ticket-rule);
+      background: #FFFFFF;
+      color: var(--ticket-text);
+      font-size: 13px;
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .ticket-field::placeholder {
+      color: #64748B;
+    }
+
+    .ticket-field:focus {
+      border-color: var(--ticket-accent);
+      box-shadow: 0 0 0 3px var(--ticket-focus-ring);
+    }
+
+    .ticket-send-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .btn-ticket-send {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 10px 14px;
+      border-radius: 6px;
+      border: 1px solid var(--ticket-rule);
+      background: #FFFFFF;
+      color: var(--ticket-text);
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      min-height: 42px;
+      transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, transform 0.08s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .btn-ticket-send:hover {
+      border-color: var(--ticket-accent);
+      background: var(--ticket-accent-soft);
+      color: var(--ticket-accent);
+    }
+
+    .btn-ticket-send:active {
+      transform: translateY(1px);
+    }
+
+    .btn-ticket-send.span-full {
+      grid-column: 1 / -1;
+    }
+
+    .btn-ticket-send.is-copied {
+      background: #ECFDF5;
+      border-color: #059669;
+      color: #065F46;
+    }
+
+    .carbon-preview-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .carbon-preview-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--ticket-muted);
+    }
+
+    .carbon-preview-chars {
+      color: var(--ticket-accent);
+      background: var(--ticket-accent-soft);
+      padding: 1px 6px;
+      border-radius: 3px;
+    }
+
+    .carbon-pre-box {
+      margin: 0;
+      padding: 10px 12px;
+      border-radius: 5px;
+      background: rgba(15, 23, 42, 0.035);
+      border: 1px dashed var(--ticket-rule);
+      color: var(--ticket-secondary);
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      line-height: 1.45;
+      white-space: pre-wrap;
+      word-break: break-word;
+      max-height: 120px;
+      overflow-y: auto;
+    }
+
+    .barcode-block {
+      text-align: center;
+      padding: 10px 8px 4px;
+      border-top: 1px dashed var(--ticket-rule);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      border-radius: 5px;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .barcode-block.is-verified {
+      background: #ECFDF5;
+    }
+
+    .barcode-block.is-verified .barcode-svg,
+    .barcode-block.is-verified .barcode-serial-code {
+      color: #065F46;
+      opacity: 1;
+    }
+
+    .barcode-svg {
+      color: var(--ticket-text);
+      opacity: 0.85;
+    }
+
+    .barcode-serial-code {
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--ticket-muted);
+      font-weight: 700;
+    }
+
+    .chassis-stamp-footer {
+      margin-top: 16px;
+      text-align: center;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(16px);
+      background: #0F172A;
+      color: #FFFFFF;
+      padding: 10px 18px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.18s cubic-bezier(0.16, 1, 0.3, 1), transform 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 120;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+    }
+
+    .toast.is-visible {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* ==========================================================================
+       6. RESPONSIVE BREAKPOINTS
+       ========================================================================== */
+    @media (max-width: 900px) {
+      .chassis-grid {
+        grid-template-columns: 1fr;
+      }
+      .printer-feeder-wing {
+        border-left: 0;
+        border-top: 2px solid var(--chassis-border);
+      }
+    }
+
+    @media (max-width: 580px) {
+      .field-workstation-wrap {
+        padding: 0 10px;
+        margin: 12px auto 32px;
+      }
+      .bezel-head {
+        padding: 18px 16px;
+      }
+      .console-pane,
+      .printer-feeder-wing {
+        padding: 18px 14px 24px;
+      }
+      .channel-rack-grid,
+      .switchboard-grid.cols-2,
+      .switchboard-grid.cols-3,
+      .ticket-input-pair,
+      .ticket-send-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ==========================================================================
+       7. ACCESSIBILITY: REDUCED MOTION
+       ========================================================================== */
+    @media (prefers-reduced-motion: reduce) {
+      .physical-stepper-btn:active,
+      .channel-tile:active,
+      .rocker-switch-tile:active,
+      .breaker-chip:active,
+      .rack-switch-btn:active,
+      .deck-action-btn:active,
+      .btn-tear-dispatch:active,
+      .btn-ticket-send:active,
+      .embed-exit-pill:active,
+      .thermal-paper-slip.is-feeding,
+      .thermal-paper-slip.is-printing,
+      .ticket-seal-stamp,
+      .ticket-seal-stamp.is-stamping,
+      .breaker-chip[aria-pressed="true"] .breaker-led,
+      .channel-tile[aria-pressed="true"] .channel-led-dot,
+      .gauge-lcd-assembly.is-flashing {
+        animation: none;
+        transform: none;
+      }
+      .ticket-drawer {
+        transition: border-top-color 0.15s ease;
+      }
+      .ticket-drawer-content {
+        transform: none;
+        transition: opacity 0.15s ease;
+      }
+      .toast {
+        transform: translateX(-50%);
+        transition: opacity 0.15s ease;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="field-workstation-wrap">
+    <!-- Buyer Preview Bar (Automatically hidden in Embed Mode / ?embed=1) -->
+    <header class="chassis-deck-bar" role="region" aria-label="Widget preview controls">
+      <div class="deck-group">
+        <span class="deck-tag">TRADE</span>
+        <div class="rack-switch-group" id="tradeSwitcher" role="group" aria-label="Select Trade Preset"></div>
+      </div>
+
+      <div class="deck-group">
+        <span class="deck-tag">THEME</span>
+        <div class="rack-switch-group" id="themeSwitcher" role="group" aria-label="Select Console Theme">
+          <button type="button" class="rack-switch-btn" data-theme-btn="clean" aria-pressed="true">
+            <span class="theme-pip" style="background:#F8FAFC"></span>Light Aluminum
+          </button>
+          <button type="button" class="rack-switch-btn" data-theme-btn="blueprint" aria-pressed="false">
+            <span class="theme-pip" style="background:#153455"></span>Cyanotype
+          </button>
+          <button type="button" class="rack-switch-btn" data-theme-btn="slate" aria-pressed="false">
+            <span class="theme-pip" style="background:#F59E0B"></span>Hazard Slate
+          </button>
+        </div>
+      </div>
+
+      <div class="deck-group">
+        <button type="button" class="deck-action-btn" id="embedToggleBtn" title="Strip outer page chrome for clean embeds or screen recordings">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+          Clean Embed
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Embeddable Calculator Chassis -->
+    <main class="chassis-unit" id="widgetRoot">
+      <div class="bezel-head">
+        <div class="bezel-brand">
+          <div class="bezel-icon-mark" id="brandIcon" aria-hidden="true"></div>
+          <div>
+            <h1 class="bezel-title" id="brandName">Plumbing Cost Estimator</h1>
+            <p class="bezel-sub" id="brandSubtitle">Answer a few quick questions for an upfront price range in under 30 seconds.</p>
+          </div>
+        </div>
+        <div class="bezel-telemetry">
+          <span class="led-indicator" aria-hidden="true"></span>
+          <span id="headerBadge">INSTANT ESTIMATE · NO SIGN-UP</span>
+        </div>
+      </div>
+
+      <div class="chassis-grid">
+        <!-- Left Wing: Homeowner Inputs -->
+        <section class="console-pane" aria-label="Project details">
+          <!-- Bay 01: Service Selection -->
+          <div class="instrument-bay">
+            <div class="bay-header-strip">
+              <h2 class="bay-legend">
+                <span class="bay-tag">BAY 01</span>
+                <span id="serviceStepTitle">What do you need help with?</span>
+              </h2>
+            </div>
+            <div class="channel-rack-grid" id="serviceCards"></div>
+          </div>
+
+          <!-- Bay 02: Scope Slider & Stepper -->
+          <div class="instrument-bay">
+            <div class="bay-header-strip">
+              <h2 class="bay-legend">
+                <span class="bay-tag">BAY 02</span>
+                <span id="sliderStepTitle">Estimate your project size</span>
+              </h2>
+            </div>
+            <div class="gauge-instrument-strip">
+              <div class="gauge-header-row">
+                <div class="gauge-title-col">
+                  <label class="gauge-label-text" for="scopeSlider" id="sliderLabel">Project Scope</label>
+                  <span class="gauge-sub-hint" id="sliderSubHint">Single-unit steps</span>
+                </div>
+                <div class="gauge-lcd-assembly" id="gaugeLcdAssembly">
+                  <span class="gauge-lcd-pill tabular" id="sliderValuePill">1</span>
+                  <span class="gauge-lcd-unit" id="sliderUnitLabel">unit</span>
+                </div>
+              </div>
+              <div class="stepper-range-assembly">
+                <button type="button" class="physical-stepper-btn" id="sliderDecBtn" aria-label="Decrease amount">−</button>
+                <div class="slider-track-wrap">
+                  <input type="range" id="scopeSlider" class="trade-slider" min="1" max="10" step="1" value="1" />
+                </div>
+                <button type="button" class="physical-stepper-btn" id="sliderIncBtn" aria-label="Increase amount">+</button>
+              </div>
+              <div class="gauge-ruler-ticks tabular">
+                <span id="sliderMinLabel">1</span>
+                <span id="sliderMidLabel">5</span>
+                <span id="sliderMaxLabel">10</span>
+              </div>
+              <p class="gauge-advisory" id="sliderHelp"></p>
+            </div>
+          </div>
+
+          <!-- Bays 03+: Dynamic Modifier Groups -->
+          <div id="modifierGroupsContainer" style="display:flex;flex-direction:column;gap:28px;"></div>
+
+          <!-- Final Bay: Optional Add-Ons -->
+          <div class="instrument-bay" id="addonsSection">
+            <div class="bay-header-strip">
+              <h2 class="bay-legend">
+                <span class="bay-tag" id="addonsStepNum">BAY 05</span>
+                <span id="addonsStepTitle">Helpful Extras (Optional)</span>
+              </h2>
+            </div>
+            <div class="accessory-switch-rack" id="addonsWrap"></div>
+          </div>
+        </section>
+
+        <!-- Right Wing: Live Thermal Paper Estimate Ticket -->
+        <aside class="printer-feeder-wing" aria-label="Live price estimate ticket">
+          <div class="feeder-telemetry-strip" aria-hidden="true">
+            <span class="feeder-status-lead">
+              <span class="feeder-pip"></span>
+              <span>LIVE ESTIMATE TICKET</span>
+            </span>
+            <span class="feeder-tag">INSTANT CALC</span>
+          </div>
+          <div class="feeder-mouth-slot" aria-hidden="true"></div>
+
+          <div class="thermal-paper-slip" id="thermalPaperSlip">
+            <div class="ticket-header-rule">
+              <p class="ticket-contractor-stamp" id="ticketContractorName">PLUMBING ESTIMATE</p>
+              <div class="ticket-meta-row">
+                <span>UPFRONT ESTIMATE SLIP</span>
+                <span class="ticket-ref-box tabular" id="quoteRef">QT-1042</span>
+              </div>
+            </div>
+
+            <div class="ticket-estimate-section" aria-live="polite" aria-atomic="true">
+              <div class="ticket-hero-range tabular" id="totalRange">$0 – $0</div>
+              <p class="ticket-scope-summary" id="quoteSummaryLine">Includes labor, standard parts, and tidy clean-up.</p>
+            </div>
+
+            <ul class="ticket-items-list" id="breakdownList"></ul>
+
+            <div class="ticket-seal-stamp" id="ticketSealStamp" aria-hidden="true">
+              <span class="seal-mark">UPFRONT ESTIMATE SLIP · NO OBLIGATION</span>
+              <span class="seal-guarantee">FINAL PRICE CONFIRMED ON SITE · NO HIDDEN FEES</span>
+              <span class="seal-audit">REF: <span id="sealRef" class="tabular">QT-1042</span></span>
+            </div>
+
+            <div class="ticket-finance-section">
+              <div class="stamp-row">
+                <div class="stamp-label">
+                  <strong id="depositLabel">Booking Deposit (25%)</strong>
+                  <span>Due only after on-site confirmation</span>
+                </div>
+                <div class="stamp-value tabular" id="depositRange">$0 – $0</div>
+              </div>
+
+              <div class="stamp-divider"></div>
+
+              <div class="stamp-row">
+                <div class="stamp-label">
+                  <strong>Estimated Monthly Payment</strong>
+                  <span id="financingDetail">36 months at 7.9% APR*</span>
+                </div>
+                <div class="stamp-value tabular" id="monthlyFigure">$0/mo</div>
+              </div>
+
+              <div class="term-button-strip" id="termPills" role="group" aria-label="Select Financing Term"></div>
+              <p class="ticket-disclaimer-note">*Illustrative monthly payment based on midpoint estimate. Subject to lender approval.</p>
+            </div>
+
+            <button type="button" class="btn-tear-dispatch" id="bookingToggleBtn" aria-expanded="false">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/><path d="m9 16 2 2 4-4"/></svg>
+              <span id="bookingBtnText">Request Official Booking</span>
+            </button>
+
+            <div class="ticket-drawer" id="bookingDrawer">
+              <div class="ticket-drawer-content">
+                <div class="drawer-header-meta">
+                  <p class="drawer-title-mono">SEND QUOTE SLIP (NO ACCOUNT NEEDED)</p>
+                  <span class="drawer-badge-green">Direct Dispatch</span>
+                </div>
+                <p class="drawer-explanatory-note">
+                  Opens a pre-filled email or text message with your itemized estimate so you can book directly without filling out long forms.
+                </p>
+                <div class="ticket-input-pair">
+                  <div class="ticket-field-group">
+                    <label class="field-label" for="custName">Your Name (Optional)</label>
+                    <input type="text" class="ticket-field" id="custName" placeholder="e.g. Alex Morgan" autocomplete="name" />
+                  </div>
+                  <div class="ticket-field-group">
+                    <label class="field-label" for="custZip">ZIP / Area (Optional)</label>
+                    <input type="text" class="ticket-field" id="custZip" placeholder="e.g. 98101" autocomplete="postal-code" />
+                  </div>
+                </div>
+                <div class="ticket-field-group">
+                  <label class="field-label" for="custNote">Notes / Preferred Day (Optional)</label>
+                  <input type="text" class="ticket-field" id="custNote" placeholder="e.g. Weekday mornings work best" />
+                </div>
+
+                <div class="ticket-send-grid">
+                  <a class="btn-ticket-send" id="mailtoLink" href="#">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                    <span>Email Slip</span>
+                  </a>
+                  <a class="btn-ticket-send" id="smsLink" href="#">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                    <span>Text Slip</span>
+                  </a>
+                  <button type="button" class="btn-ticket-send span-full" id="copySlipBtn">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                    <span id="copySlipBtnLabel">Copy Quote Slip to Clipboard</span>
+                  </button>
+                </div>
+
+                <div class="carbon-preview-wrap">
+                  <div class="carbon-preview-header">
+                    <span>QUOTE SLIP PREVIEW</span>
+                    <span class="carbon-preview-chars tabular" id="carbonCharCount">0 CHARS</span>
+                  </div>
+                  <pre class="carbon-pre-box" id="slipPreview"></pre>
+                </div>
+              </div>
+            </div>
+
+            <div class="barcode-block" id="barcodeBlock">
+              <svg class="barcode-svg" viewBox="0 0 180 24" width="160" height="22" aria-hidden="true">
+                <rect x="0" y="0" width="2" height="24" fill="currentColor"/>
+                <rect x="4" y="0" width="3" height="24" fill="currentColor"/>
+                <rect x="9" y="0" width="1" height="24" fill="currentColor"/>
+                <rect x="13" y="0" width="4" height="24" fill="currentColor"/>
+                <rect x="20" y="0" width="2" height="24" fill="currentColor"/>
+                <rect x="24" y="0" width="1" height="24" fill="currentColor"/>
+                <rect x="27" y="0" width="3" height="24" fill="currentColor"/>
+                <rect x="33" y="0" width="2" height="24" fill="currentColor"/>
+                <rect x="37" y="0" width="4" height="24" fill="currentColor"/>
+                <rect x="44" y="0" width="1" height="24" fill="currentColor"/>
+                <rect x="48" y="0" width="3" height="24" fill="currentColor"/>
+                <rect x="54" y="0" width="2" height="24" fill="currentColor"/>
+                <rect x="58" y="0" width="4" height="24" fill="currentColor"/>
+                <rect x="65" y="0" width="1" height="24" fill="currentColor"/>
+                <rect x="69" y="0" width="2" height="24" fill="currentColor"/>
+                <rect x="74" y="0" width="3" height="24" fill="currentColor"/>
+                <rect x="80" y="0" width="1" height="24" fill="currentColor"/>
+                <rect x="83" y="0" width="4" height="24" fill="currentColor"/>
+                <rect x="90" y="0" width="2" height="24" fill="currentColor"/>
+                <rect x="95" y="0" width="1" height="24" fill="currentColor"/>
+                <rect x="99" y="0" width="3" height="24" fill="currentColor"/>
+                <rect x="105" y="0" width="2" height="24" fill="currentColor"/>
+                <rect x="110" y="0" width="4" height="24" fill="currentColor"/>
+                <rect x="117" y="0" width="1" height="24" fill="currentColor"/>
+                <rect x="121" y="0" width="3" height="24" fill="currentColor"/>
+                <rect x="127" y="0" width="2" height="24" fill="currentColor"/>
+                <rect x="132" y="0" width="4" height="24" fill="currentColor"/>
+                <rect x="139" y="0" width="1" height="24" fill="currentColor"/>
+                <rect x="143" y="0" width="3" height="24" fill="currentColor"/>
+                <rect x="149" y="0" width="2" height="24" fill="currentColor"/>
+                <rect x="154" y="0" width="4" height="24" fill="currentColor"/>
+                <rect x="161" y="0" width="1" height="24" fill="currentColor"/>
+                <rect x="165" y="0" width="3" height="24" fill="currentColor"/>
+                <rect x="171" y="0" width="2" height="24" fill="currentColor"/>
+                <rect x="176" y="0" width="4" height="24" fill="currentColor"/>
+              </svg>
+              <span class="barcode-serial-code" id="barcodeSerialCode">*QT-1042-READY*</span>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="chassis-stamp-footer">
+      CONTRACTORQUOTE INTERACTIVE DEMO (2 OF 5 TRADES SHOWN)
+    </footer>
+  </div>
+
+  <button type="button" class="embed-exit-pill" id="embedExitBtn">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7"/></svg>
+    Exit Embed Mode
+  </button>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    /* ============================================================================
+       === START EDITABLE CONFIG: EDIT PRICES, TRADES & CONTACT DETAILS HERE ======
+       ============================================================================ */
+    const TRADE_WIDGET_CONFIG = {
+      defaultTrade: 'plumbing',        // 'plumbing' | 'roofing' | 'hvac' | 'electrical' | 'painting'
+      defaultTheme: 'clean',           // 'clean' (Light Aluminum) | 'blueprint' | 'slate'
+      currency: '$',
+      locale: 'en-US',
+      depositPercent: 25,              // % shown for booking deposit
+      financingApr: 7.9,               // Annual % rate (set to 0 for 0% promo plans)
+      financingTerms: [12, 24, 36, 60],
+      defaultFinancingTerm: 36,
+
+      trades: {
+        /* ------------------------------------------------------------------------
+           1. PLUMBING PRESET
+           ------------------------------------------------------------------------ */
+        plumbing: {
+          label: 'Plumbing',
+          title: 'Plumbing Cost Estimator',
+          companyName: '',             // Optional: add your business name (leave '' for white-label)
+          ticketLabel: 'PLUMBING ESTIMATE',
+          subtitle: 'Pick your plumbing issue below for an upfront price range in 30 seconds.',
+          headerBadge: 'UPFRONT ESTIMATE · NO SIGN-UP',
+          brandIcon: 'droplet',
+          contactEmail: 'quotes@yourbusiness.example',
+          contactPhone: '+15550100000',
+          serviceStepTitle: 'What plumbing issue do you need fixed?',
+          sliderStepTitle: 'Tell us the rough size of the job',
+          addonsStepTitle: 'Helpful Extras (Optional)',
+          summaryFootnote: 'Includes licensed technician labor, standard fittings, and tidy clean-up.',
+
+          services: [
+            {
+              id: 'leak',
+              name: 'Leak Repair',
+              desc: 'Dripping pipes, faucets, supply lines, or under-sink leaks',
+              icon: 'droplet',
+              badge: 'Most Common',
+              baseMin: 185,
+              baseMax: 245,
+              perUnitMin: 95,
+              perUnitMax: 130,
+              includedUnits: 1,
+              slider: {
+                label: 'How many leak spots need fixing?',
+                unit: 'spot',
+                unitPlural: 'spots',
+                min: 1,
+                max: 6,
+                step: 1,
+                defaultVal: 1,
+                help: 'Count each separate sink, pipe joint, or outdoor spigot that is leaking.'
+              }
+            },
+            {
+              id: 'drain',
+              name: 'Drain Clearing',
+              desc: 'Slow or clogged sinks, tubs, showers, or main sewer lines',
+              icon: 'pipe',
+              badge: 'Fast Fix',
+              baseMin: 155,
+              baseMax: 215,
+              perUnitMin: 75,
+              perUnitMax: 105,
+              includedUnits: 1,
+              slider: {
+                label: 'How many drains are backed up?',
+                unit: 'drain',
+                unitPlural: 'drains',
+                min: 1,
+                max: 5,
+                step: 1,
+                defaultVal: 1,
+                help: 'If multiple tubs and toilets back up together, select 2+ for main-line clearing.'
+              }
+            },
+            {
+              id: 'heater',
+              name: 'Water Heater Swap',
+              desc: 'Remove old tank, install code-compliant unit & haul away',
+              icon: 'flame',
+              badge: 'Turnkey',
+              baseMin: 1450,
+              baseMax: 1750,
+              perUnitMin: 150,
+              perUnitMax: 200,
+              includedUnits: 2,
+              slider: {
+                label: 'How many people live in your home?',
+                unit: 'person',
+                unitPlural: 'people',
+                min: 1,
+                max: 8,
+                step: 1,
+                defaultVal: 3,
+                help: 'Sizes the right tank capacity (40 gal for 1–2 people, 50–80 gal for larger homes).'
+              }
+            },
+            {
+              id: 'fixture',
+              name: 'Fixture Installation',
+              desc: 'Install new toilet, kitchen faucet, or garbage disposal',
+              icon: 'faucet',
+              badge: 'Clean Swap',
+              baseMin: 240,
+              baseMax: 320,
+              perUnitMin: 175,
+              perUnitMax: 235,
+              includedUnits: 1,
+              slider: {
+                label: 'How many fixtures are we installing?',
+                unit: 'fixture',
+                unitPlural: 'fixtures',
+                min: 1,
+                max: 6,
+                step: 1,
+                defaultVal: 2,
+                help: 'Discounted multi-fixture rate applies automatically after the first unit.'
+              }
+            }
+          ],
+
+          modifierGroups: [
+            {
+              id: 'partsTier',
+              title: 'Parts & Material Quality',
+              kind: 'multiplier',
+              defaultOption: 'standard',
+              options: [
+                { id: 'standard', name: 'Standard Grade', desc: 'Dependable everyday residential parts', multiplier: 1.0, tag: 'Included' },
+                { id: 'pro', name: 'Pro Brass Heavy Duty', desc: 'Forged brass valves & braided lines', multiplier: 1.18, tag: '+18%' },
+                { id: 'premium', name: 'Premium Eco-Saver', desc: 'Water-saving fixtures & extended warranty', multiplier: 1.35, tag: '+35%' }
+              ]
+            },
+            {
+              id: 'urgency',
+              title: 'How soon do you need service?',
+              kind: 'flat',
+              defaultOption: 'flex',
+              options: [
+                { id: 'flex', name: 'Standard Window', desc: 'Scheduled within 3–5 business days', flatMin: 0, flatMax: 0, tag: 'No fee' },
+                { id: 'nextday', name: 'Next-Day Priority', desc: 'Guaranteed arrival tomorrow', flatMin: 65, flatMax: 85, tag: '+$65–$85' },
+                { id: 'emergency', name: 'Same-Day Urgent', desc: 'Fast dispatch for active leaks', flatMin: 150, flatMax: 195, tag: '+$150–$195' }
+              ]
+            }
+          ],
+
+          addons: [
+            { id: 'camera', name: 'In-Pipe Camera Inspection', price: 115 },
+            { id: 'shutoff', name: 'New 1/4-Turn Shutoff Valve', price: 85 },
+            { id: 'warranty', name: '2-Year Care Warranty', price: 95 }
+          ]
+        },
+
+        /* ------------------------------------------------------------------------
+           2. ROOFING PRESET
+           ------------------------------------------------------------------------ */
+        roofing: {
+          label: 'Roofing',
+          title: 'Roofing Cost Estimator',
+          companyName: '',
+          ticketLabel: 'ROOFING ESTIMATE',
+          subtitle: 'Slide your approximate home size and roof style for a clear ballpark range.',
+          headerBadge: 'FREE ON-SITE CHECK · NO SIGN-UP',
+          brandIcon: 'roof',
+          contactEmail: 'quotes@yourbusiness.example',
+          contactPhone: '+15550100000',
+          serviceStepTitle: 'What type of roof work do you need?',
+          sliderStepTitle: 'Estimate your roof or project size',
+          addonsStepTitle: 'Common Roof Upgrades (Optional)',
+          summaryFootnote: 'Includes tear-off disposal, protective underlayment, and magnetic nail sweep.',
+
+          services: [
+            {
+              id: 'replace',
+              name: 'Full Roof Replacement',
+              desc: 'Complete tear-off, moisture barrier & brand-new roofing system',
+              icon: 'roof',
+              badge: 'Most Popular',
+              baseMin: 1200,
+              baseMax: 1500,
+              perUnitMin: 4.10,
+              perUnitMax: 5.00,
+              includedUnits: 0,
+              slider: {
+                label: 'Approximate Roof Area',
+                unit: 'sq ft',
+                unitPlural: 'sq ft',
+                min: 800,
+                max: 4500,
+                step: 100,
+                defaultVal: 1800,
+                help: 'Not sure? Most 3-bedroom single-family homes have a 1,600–2,200 sq ft roof.'
+              }
+            },
+            {
+              id: 'repair',
+              name: 'Leak & Shingle Repair',
+              desc: 'Fix storm damage, active leaks, pipe boots, or chimney flashing',
+              icon: 'patch',
+              badge: 'Targeted Fix',
+              baseMin: 350,
+              baseMax: 475,
+              perUnitMin: 12,
+              perUnitMax: 17,
+              includedUnits: 10,
+              slider: {
+                label: 'Estimated Affected Area',
+                unit: 'sq ft',
+                unitPlural: 'sq ft',
+                min: 10,
+                max: 200,
+                step: 10,
+                defaultVal: 30,
+                help: 'A typical wind-blown shingle patch or flashing repair covers 20–40 sq ft.'
+              }
+            },
+            {
+              id: 'gutter',
+              name: 'Seamless Gutters',
+              desc: 'Custom extruded aluminum gutters & matching downspouts',
+              icon: 'gutter',
+              badge: 'Drainage',
+              baseMin: 280,
+              baseMax: 380,
+              perUnitMin: 8.50,
+              perUnitMax: 11.50,
+              includedUnits: 0,
+              slider: {
+                label: 'Total Roofline Length',
+                unit: 'ft',
+                unitPlural: 'ft',
+                min: 60,
+                max: 360,
+                step: 10,
+                defaultVal: 160,
+                help: 'An average single-story home has 130–200 feet of gutter edge.'
+              }
+            },
+            {
+              id: 'tuneup',
+              name: 'Roof Tune-Up & Seal',
+              desc: 'Inspect deck, reseal vents, pipe boots & loose ridge caps',
+              icon: 'shield',
+              badge: 'Preventative',
+              baseMin: 275,
+              baseMax: 360,
+              perUnitMin: 0.12,
+              perUnitMax: 0.18,
+              includedUnits: 1000,
+              slider: {
+                label: 'Approximate Roof Area',
+                unit: 'sq ft',
+                unitPlural: 'sq ft',
+                min: 800,
+                max: 4500,
+                step: 100,
+                defaultVal: 1800,
+                help: 'Extends roof life 5–8 years by sealing the spots where leaks start first.'
+              }
+            }
+          ],
+
+          modifierGroups: [
+            {
+              id: 'materialTier',
+              title: 'Material Style',
+              kind: 'multiplier',
+              defaultOption: 'arch',
+              options: [
+                { id: 'arch', name: 'Architectural Shingle', desc: '30-yr classic homeowner pick', multiplier: 1.0, tag: 'Standard' },
+                { id: 'impact', name: 'Class 4 Impact-Rated', desc: 'Hail-resistant & durable', multiplier: 1.24, tag: '+24%' },
+                { id: 'metal', name: 'Standing Seam Metal', desc: '50-yr crisp modern look', multiplier: 1.65, tag: '+65%' }
+              ]
+            },
+            {
+              id: 'pitch',
+              title: 'How steep is your roof?',
+              kind: 'multiplier',
+              defaultOption: 'medium',
+              options: [
+                { id: 'low', name: 'Gentle / Walkable', desc: 'Low angle, easy access', multiplier: 1.0, tag: 'Base rate' },
+                { id: 'medium', name: 'Average Slope', desc: 'Typical residential roof', multiplier: 1.12, tag: '+12%' },
+                { id: 'steep', name: 'Steep / High', desc: 'Extra harness & safety staging', multiplier: 1.28, tag: '+28%' }
+              ]
+            },
+            {
+              id: 'urgency',
+              title: 'Timeline & Urgency',
+              kind: 'flat',
+              defaultOption: 'flex',
+              options: [
+                { id: 'flex', name: 'Planning Ahead', desc: 'Flexible booking next 2–3 wks', flatMin: 0, flatMax: 0, tag: 'No fee' },
+                { id: 'priority', name: 'Priority Slot', desc: 'Fast-tracked within 7 days', flatMin: 175, flatMax: 225, tag: '+$175–$225' },
+                { id: 'tarp', name: 'Active Leak / Tarp', desc: 'Same-day emergency tarp & crew', flatMin: 325, flatMax: 425, tag: '+$325–$425' }
+              ]
+            }
+          ],
+
+          addons: [
+            { id: 'decking', name: 'Wood Decking Allowance (3 sheets)', price: 285 },
+            { id: 'ridgevent', name: 'Attic Ridge Vent Upgrade', price: 390 },
+            { id: 'skylight', name: 'Reseal Skylight Flashing', price: 240 }
+          ]
+        }
+      }
+    };
+    /* ============================================================================
+       === END EDITABLE CONFIG ====================================================
+       ============================================================================ */
+
+    (function initContractorQuoteConsole() {
+      'use strict';
+
+      const ICONS = {
+        droplet: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>',
+        pipe: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h10a4 4 0 0 1 4 4v8"/><path d="M4 10h8a2 2 0 0 1 2 2v6"/><path d="M2 5v6M13 18h6"/></svg>',
+        flame: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>',
+        faucet: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 4h4M12 4v4M4 12h11a3 3 0 0 1 3 3v2"/><path d="M4 9v6M18 20v.01"/></svg>',
+        roof: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7"/><path d="M5 10v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-9"/></svg>',
+        patch: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M4 12h16M12 4v16"/></svg>',
+        gutter: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18v4a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V6z"/><path d="M17 13v7l3 2"/></svg>',
+        shield: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>',
+        hvac: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M19.07 4.93L4.93 19.07"/><circle cx="12" cy="12" r="3"/></svg>',
+        wind: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.7 7.7A2.5 2.5 0 1 1 19.5 12H2"/><path d="M9.6 4.6A2 2 0 1 1 11 8H2"/><path d="M12.6 19.4A2 2 0 1 0 14 16H2"/></svg>',
+        bolt: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>',
+        panel: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h3M13 8h3M8 12h3M13 12h3M8 16h8"/></svg>',
+        plug: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22v-5M9 8V2M15 8V2M18 8v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8Z"/></svg>',
+        lamp: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2z"/></svg>',
+        roller: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="15" height="6" rx="2"/><path d="M18 6h2a1 1 0 0 1 1 1v4a2 2 0 0 1-2 2h-7a2 2 0 0 0-2 2v6"/></svg>',
+        brush: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18.37 2.63 14 7l-1.59-1.59a2 2 0 0 0-2.82 0L8 7l9 9 1.59-1.59a2 2 0 0 0 0-2.82L17 10l4.37-4.37a2.12 2.12 0 1 0-3-3Z"/><path d="M9 8c-2 3-4 3.5-7 4l8 10c2-1 6-5 6-7"/></svg>',
+        check: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>'
+      };
+
+      const VALID_THEMES = ['clean', 'blueprint', 'slate'];
+      const tradeKeys = Object.keys(TRADE_WIDGET_CONFIG.trades);
+
+      const params = new URLSearchParams(window.location.search);
+      const urlTrade = params.get('trade');
+      const urlTheme = params.get('theme');
+      const urlEmbed = params.get('embed') === '1' || params.get('embed') === 'true';
+
+      const initialTrade = tradeKeys.includes(urlTrade)
+        ? urlTrade
+        : (tradeKeys.includes(TRADE_WIDGET_CONFIG.defaultTrade) ? TRADE_WIDGET_CONFIG.defaultTrade : tradeKeys[0]);
+
+      const initialTheme = VALID_THEMES.includes(urlTheme)
+        ? urlTheme
+        : (VALID_THEMES.includes(TRADE_WIDGET_CONFIG.defaultTheme) ? TRADE_WIDGET_CONFIG.defaultTheme : 'clean');
+
+      const state = {
+        tradeId: initialTrade,
+        theme: initialTheme,
+        embedMode: urlEmbed,
+        lockedEmbed: urlEmbed,
+        financingTerm: TRADE_WIDGET_CONFIG.defaultFinancingTerm || 36,
+        bookingOpen: false,
+        quoteRef: 'QT-' + Math.floor(1000 + Math.random() * 9000),
+        perTrade: {}
+      };
+
+      const el = {
+        tradeSwitcher: document.getElementById('tradeSwitcher'),
+        themeBtns: document.querySelectorAll('[data-theme-btn]'),
+        copyEmbedBtn: document.getElementById('copyEmbedBtn'),
+        embedToggleBtn: document.getElementById('embedToggleBtn'),
+        embedExitBtn: document.getElementById('embedExitBtn'),
+        brandIcon: document.getElementById('brandIcon'),
+        brandName: document.getElementById('brandName'),
+        brandSubtitle: document.getElementById('brandSubtitle'),
+        headerBadge: document.getElementById('headerBadge'),
+        serviceStepTitle: document.getElementById('serviceStepTitle'),
+        serviceCards: document.getElementById('serviceCards'),
+        sliderStepTitle: document.getElementById('sliderStepTitle'),
+        sliderLabel: document.getElementById('sliderLabel'),
+        sliderSubHint: document.getElementById('sliderSubHint'),
+        sliderValuePill: document.getElementById('sliderValuePill'),
+        sliderUnitLabel: document.getElementById('sliderUnitLabel'),
+        gaugeLcdAssembly: document.getElementById('gaugeLcdAssembly'),
+        scopeSlider: document.getElementById('scopeSlider'),
+        sliderDecBtn: document.getElementById('sliderDecBtn'),
+        sliderIncBtn: document.getElementById('sliderIncBtn'),
+        sliderMinLabel: document.getElementById('sliderMinLabel'),
+        sliderMidLabel: document.getElementById('sliderMidLabel'),
+        sliderMaxLabel: document.getElementById('sliderMaxLabel'),
+        sliderHelp: document.getElementById('sliderHelp'),
+        modifierGroupsContainer: document.getElementById('modifierGroupsContainer'),
+        addonsSection: document.getElementById('addonsSection'),
+        addonsStepNum: document.getElementById('addonsStepNum'),
+        addonsStepTitle: document.getElementById('addonsStepTitle'),
+        addonsWrap: document.getElementById('addonsWrap'),
+        ticketContractorName: document.getElementById('ticketContractorName'),
+        barcodeSerialCode: document.getElementById('barcodeSerialCode'),
+        quoteRef: document.getElementById('quoteRef'),
+        thermalPaperSlip: document.getElementById('thermalPaperSlip'),
+        ticketSealStamp: document.getElementById('ticketSealStamp'),
+        sealRef: document.getElementById('sealRef'),
+        barcodeBlock: document.getElementById('barcodeBlock'),
+        totalRange: document.getElementById('totalRange'),
+        quoteSummaryLine: document.getElementById('quoteSummaryLine'),
+        breakdownList: document.getElementById('breakdownList'),
+        depositLabel: document.getElementById('depositLabel'),
+        depositRange: document.getElementById('depositRange'),
+        financingDetail: document.getElementById('financingDetail'),
+        monthlyFigure: document.getElementById('monthlyFigure'),
+        termPills: document.getElementById('termPills'),
+        bookingToggleBtn: document.getElementById('bookingToggleBtn'),
+        bookingBtnText: document.getElementById('bookingBtnText'),
+        bookingDrawer: document.getElementById('bookingDrawer'),
+        custName: document.getElementById('custName'),
+        custZip: document.getElementById('custZip'),
+        custNote: document.getElementById('custNote'),
+        mailtoLink: document.getElementById('mailtoLink'),
+        smsLink: document.getElementById('smsLink'),
+        copySlipBtn: document.getElementById('copySlipBtn'),
+        copySlipBtnLabel: document.getElementById('copySlipBtnLabel'),
+        carbonCharCount: document.getElementById('carbonCharCount'),
+        slipPreview: document.getElementById('slipPreview'),
+        toast: document.getElementById('toast'),
+        widgetRoot: document.getElementById('widgetRoot')
+      };
+
+      function escapeHTML(str) {
+        return String(str ?? '')
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+
+      function fmtMoney(amount) {
+        const rounded = Math.max(0, Math.round(amount));
+        return TRADE_WIDGET_CONFIG.currency + rounded.toLocaleString(TRADE_WIDGET_CONFIG.locale);
+      }
+
+      function fmtRange(min, max) {
+        const rMin = Math.round(min);
+        const rMax = Math.round(max);
+        return rMin === rMax ? fmtMoney(rMin) : `${fmtMoney(rMin)} – ${fmtMoney(rMax)}`;
+      }
+
+      function fmtUnit(val, sliderCfg) {
+        const num = Number(val);
+        const label = num === 1 ? sliderCfg.unit : (sliderCfg.unitPlural || sliderCfg.unit);
+        return `${num.toLocaleString(TRADE_WIDGET_CONFIG.locale)} ${label}`;
+      }
+
+      function getDisplayBrand(trade) {
+        return (trade.companyName && trade.companyName.trim()) ? trade.companyName.trim() : trade.title;
+      }
+
+      function getTicketHeading(trade) {
+        return (trade.companyName && trade.companyName.trim())
+          ? trade.companyName.trim().toUpperCase()
+          : (trade.ticketLabel || `${trade.label.toUpperCase()} ESTIMATE`);
+      }
+
+      let toastTimer = null;
+      function showToast(message) {
+        el.toast.textContent = message;
+        el.toast.classList.add('is-visible');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => el.toast.classList.remove('is-visible'), 2400);
+      }
+
+      function copyTextSafe(text, successMsg) {
+        if (navigator.clipboard && window.isSecureContext) {
+          navigator.clipboard.writeText(text).then(
+            () => showToast(successMsg),
+            () => fallbackCopy(text, successMsg)
+          );
+        } else {
+          fallbackCopy(text, successMsg);
+        }
+      }
+
+      function fallbackCopy(text, successMsg) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        try {
+          document.execCommand('copy');
+          showToast(successMsg);
+        } catch (err) {
+          showToast('Select and copy the quote text manually.');
+        }
+        document.body.removeChild(ta);
+      }
+
+      function getTradeState(tradeId) {
+        if (!state.perTrade[tradeId]) {
+          const trade = TRADE_WIDGET_CONFIG.trades[tradeId];
+          const defaultService = trade.services[0];
+          const modifiers = {};
+          (trade.modifierGroups || []).forEach(g => {
+            modifiers[g.id] = g.defaultOption || g.options[0].id;
+          });
+          state.perTrade[tradeId] = {
+            serviceId: defaultService.id,
+            sliderVal: defaultService.slider.defaultVal,
+            modifiers,
+            addons: []
+          };
+        }
+        return state.perTrade[tradeId];
+      }
+
+      function applyTheme(themeName) {
+        state.theme = themeName;
+        document.documentElement.setAttribute('data-theme', themeName);
+        el.themeBtns.forEach(btn => {
+          btn.setAttribute('aria-pressed', String(btn.dataset.themeBtn === themeName));
+        });
+      }
+
+      function applyEmbedMode(enabled) {
+        state.embedMode = enabled;
+        document.body.classList.toggle('is-embed', enabled);
+        document.body.classList.toggle('is-locked-embed', state.lockedEmbed);
+        postResizeHeight();
+      }
+
+      function renderTradeSwitcher() {
+        el.tradeSwitcher.innerHTML = tradeKeys.map(key => {
+          const t = TRADE_WIDGET_CONFIG.trades[key];
+          const pressed = key === state.tradeId;
+          return `<button type="button" class="rack-switch-btn" data-trade-btn="${escapeHTML(key)}" aria-pressed="${pressed}">${escapeHTML(t.label)}</button>`;
+        }).join('');
+      }
+
+      function renderTermPills() {
+        const terms = TRADE_WIDGET_CONFIG.financingTerms || [12, 24, 36, 60];
+        el.termPills.innerHTML = terms.map(m => {
+          const active = m === state.financingTerm;
+          return `<button type="button" class="term-stamp-btn tabular" data-term="${m}" aria-pressed="${active}">${m} MO</button>`;
+        }).join('');
+      }
+
+      function syncSliderControl(service, currentVal) {
+        const s = service.slider;
+        const clampedVal = Math.min(s.max, Math.max(s.min, Number(currentVal)));
+        el.scopeSlider.min = String(s.min);
+        el.scopeSlider.max = String(s.max);
+        el.scopeSlider.step = String(s.step);
+        el.scopeSlider.value = String(clampedVal);
+
+        el.sliderLabel.textContent = s.label;
+        const stepNum = Number(s.step || 1);
+        el.sliderSubHint.textContent = stepNum === 1
+          ? `Adjusts in single-${s.unit} steps`
+          : `Adjusts in ${stepNum.toLocaleString(TRADE_WIDGET_CONFIG.locale)} ${s.unitPlural || s.unit} increments`;
+
+        el.sliderHelp.textContent = s.help || '';
+        el.sliderHelp.style.display = s.help ? 'block' : 'none';
+
+        const mid = Math.round((s.min + s.max) / 2);
+        el.sliderMinLabel.textContent = fmtUnit(s.min, s);
+        el.sliderMidLabel.textContent = fmtUnit(mid, s);
+        el.sliderMaxLabel.textContent = fmtUnit(s.max, s);
+
+        updateSliderVisual(service, clampedVal);
+      }
+
+      function updateSliderVisual(service, val) {
+        const s = service.slider;
+        const numVal = Number(val);
+        const span = s.max - s.min;
+        const pct = span > 0 ? ((numVal - s.min) / span) * 100 : 0;
+        el.scopeSlider.style.setProperty('--pct', `${Math.min(100, Math.max(0, pct))}%`);
+        el.sliderValuePill.textContent = numVal.toLocaleString(TRADE_WIDGET_CONFIG.locale);
+        el.sliderUnitLabel.textContent = numVal === 1 ? s.unit : (s.unitPlural || s.unit);
+
+        el.sliderDecBtn.disabled = numVal <= s.min;
+        el.sliderIncBtn.disabled = numVal >= s.max;
+
+        el.gaugeLcdAssembly.classList.remove('is-flashing');
+        void el.gaugeLcdAssembly.offsetWidth;
+        el.gaugeLcdAssembly.classList.add('is-flashing');
+      }
+
+      function formatBayNum(n) {
+        return 'BAY ' + String(n).padStart(2, '0');
+      }
+
+      function renderTradeWorkspace() {
+        const trade = TRADE_WIDGET_CONFIG.trades[state.tradeId];
+        const ts = getTradeState(state.tradeId);
+        const activeService = trade.services.find(s => s.id === ts.serviceId) || trade.services[0];
+
+        el.brandIcon.innerHTML = ICONS[trade.brandIcon] || ICONS.roof;
+        el.brandName.textContent = getDisplayBrand(trade);
+        el.brandSubtitle.textContent = trade.subtitle;
+        el.headerBadge.textContent = trade.headerBadge;
+        el.serviceStepTitle.textContent = trade.serviceStepTitle;
+        el.sliderStepTitle.textContent = trade.sliderStepTitle;
+        el.quoteSummaryLine.textContent = trade.summaryFootnote;
+        el.quoteRef.textContent = state.quoteRef;
+        el.ticketContractorName.textContent = getTicketHeading(trade);
+        el.barcodeSerialCode.textContent = `*${state.quoteRef}-READY*`;
+
+        el.serviceCards.innerHTML = trade.services.map(srv => {
+          const selected = srv.id === activeService.id;
+          return `
+            <button type="button" class="channel-tile" data-service-id="${escapeHTML(srv.id)}" aria-pressed="${selected}">
+              <div class="channel-top">
+                <div class="channel-icon-pill">
+                  <span class="channel-led-dot" aria-hidden="true"></span>
+                  <span class="channel-name">${escapeHTML(srv.name)}</span>
+                </div>
+                ${srv.badge ? `<span class="channel-badge">${escapeHTML(srv.badge)}</span>` : ''}
+              </div>
+              <div class="channel-desc">${escapeHTML(srv.desc)}</div>
+            </button>
+          `;
+        }).join('');
+
+        syncSliderControl(activeService, ts.sliderVal);
+
+        const groups = trade.modifierGroups || [];
+        el.modifierGroupsContainer.innerHTML = groups.map((group, idx) => {
+          const bayTag = formatBayNum(idx + 3);
+          const gridColsClass = group.options.length === 2 ? 'cols-2' : 'cols-3';
+          const selectedOptId = ts.modifiers[group.id] || group.options[0].id;
+
+          return `
+            <div class="instrument-bay">
+              <div class="bay-header-strip">
+                <h2 class="bay-legend">
+                  <span class="bay-tag">${bayTag}</span>
+                  <span>${escapeHTML(group.title)}</span>
+                </h2>
+              </div>
+              <div class="switchboard-grid ${gridColsClass}">
+                ${group.options.map(opt => {
+                  const active = opt.id === selectedOptId;
+                  return `
+                    <button type="button" class="rocker-switch-tile" data-mod-group="${escapeHTML(group.id)}" data-mod-opt="${escapeHTML(opt.id)}" aria-pressed="${active}">
+                      <div class="rocker-name">${escapeHTML(opt.name)}</div>
+                      <div class="rocker-desc">${escapeHTML(opt.desc)}</div>
+                      ${opt.tag ? `<div class="rocker-delta">${escapeHTML(opt.tag)}</div>` : ''}
+                    </button>
+                  `;
+                }).join('')}
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        const addons = trade.addons || [];
+        if (addons.length === 0) {
+          el.addonsSection.style.display = 'none';
+        } else {
+          el.addonsSection.style.display = 'flex';
+          el.addonsStepNum.textContent = formatBayNum(groups.length + 3);
+          el.addonsStepTitle.textContent = trade.addonsStepTitle || 'Helpful Extras (Optional)';
+          el.addonsWrap.innerHTML = addons.map(addon => {
+            const active = ts.addons.includes(addon.id);
+            return `
+              <button type="button" class="breaker-chip" data-addon-id="${escapeHTML(addon.id)}" aria-pressed="${active}">
+                <span class="breaker-led" aria-hidden="true">${ICONS.check}</span>
+                <span>${escapeHTML(addon.name)}</span>
+                <span class="breaker-price tabular">+${fmtMoney(addon.price)}</span>
+              </button>
+            `;
+          }).join('');
+        }
+
+        recalculateQuote({ major: true });
+        postResizeHeight();
+      }
+
+      function calculateEstimate() {
+        const trade = TRADE_WIDGET_CONFIG.trades[state.tradeId];
+        const ts = getTradeState(state.tradeId);
+        const service = trade.services.find(s => s.id === ts.serviceId) || trade.services[0];
+
+        const billableUnits = Math.max(0, Number(ts.sliderVal) - (service.includedUnits || 0));
+        const baseJobMin = Math.round(service.baseMin + billableUnits * service.perUnitMin);
+        const baseJobMax = Math.round(service.baseMax + billableUnits * service.perUnitMax);
+
+        const lines = [
+          {
+            label: service.name,
+            detail: fmtUnit(ts.sliderVal, service.slider),
+            min: baseJobMin,
+            max: baseJobMax
+          }
+        ];
+
+        (trade.modifierGroups || []).forEach(group => {
+          const optId = ts.modifiers[group.id] || group.options[0].id;
+          const opt = group.options.find(o => o.id === optId) || group.options[0];
+
+          if (group.kind === 'multiplier') {
+            const deltaFactor = (opt.multiplier || 1) - 1;
+            const dMin = Math.round(baseJobMin * deltaFactor);
+            const dMax = Math.round(baseJobMax * deltaFactor);
+            lines.push({
+              label: opt.name,
+              detail: deltaFactor === 0 ? 'Standard' : '',
+              min: dMin,
+              max: dMax,
+              showZeroAsIncluded: true
+            });
+          } else if (group.kind === 'flat') {
+            const fMin = Math.round(opt.flatMin || 0);
+            const fMax = Math.round(opt.flatMax || 0);
+            if (fMin > 0 || fMax > 0) {
+              lines.push({
+                label: opt.name,
+                detail: 'Scheduling',
+                min: fMin,
+                max: fMax
+              });
+            }
+          }
+        });
+
+        const addonList = trade.addons || [];
+        ts.addons.forEach(addonId => {
+          const addon = addonList.find(a => a.id === addonId);
+          if (addon) {
+            const p = Math.round(addon.price);
+            lines.push({
+              label: addon.name,
+              detail: 'Add-on',
+              min: p,
+              max: p
+            });
+          }
+        });
+
+        const totalMin = lines.reduce((sum, item) => sum + item.min, 0);
+        const totalMax = lines.reduce((sum, item) => sum + item.max, 0);
+
+        const depPct = TRADE_WIDGET_CONFIG.depositPercent || 25;
+        const depositMin = Math.round(totalMin * (depPct / 100));
+        const depositMax = Math.round(totalMax * (depPct / 100));
+
+        const midpoint = (totalMin + totalMax) / 2;
+        const months = Math.max(1, state.financingTerm);
+        const apr = Math.max(0, Number(TRADE_WIDGET_CONFIG.financingApr) || 0);
+        const monthlyRate = apr / 100 / 12;
+        let monthlyPayment = 0;
+
+        if (monthlyRate === 0) {
+          monthlyPayment = midpoint / months;
+        } else {
+          const factor = Math.pow(1 + monthlyRate, months);
+          monthlyPayment = midpoint * ((monthlyRate * factor) / (factor - 1));
+        }
+
+        return {
+          trade,
+          service,
+          sliderVal: ts.sliderVal,
+          lines,
+          totalMin,
+          totalMax,
+          depPct,
+          depositMin,
+          depositMax,
+          monthlyPayment: Math.round(monthlyPayment),
+          apr,
+          months
+        };
+      }
+
+      function triggerFeedAnimation(major = false) {
+        const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        el.totalRange.classList.remove('is-updating');
+        void el.totalRange.offsetWidth;
+        el.totalRange.classList.add('is-updating');
+
+        if (!prefersReduced) {
+          el.ticketSealStamp.classList.remove('is-stamping');
+          void el.ticketSealStamp.offsetWidth;
+          el.ticketSealStamp.classList.add('is-stamping');
+
+          const animClass = major ? 'is-printing' : 'is-feeding';
+          el.thermalPaperSlip.classList.remove('is-feeding', 'is-printing');
+          void el.thermalPaperSlip.offsetWidth;
+          el.thermalPaperSlip.classList.add(animClass);
+        }
+      }
+
+      function recalculateQuote(options = {}) {
+        const calc = calculateEstimate();
+
+        el.totalRange.textContent = fmtRange(calc.totalMin, calc.totalMax);
+        el.depositLabel.textContent = `Booking Deposit (${calc.depPct}%)`;
+        el.depositRange.textContent = fmtRange(calc.depositMin, calc.depositMax);
+        el.financingDetail.textContent = `${calc.months} months at ${calc.apr}% APR*`;
+        el.monthlyFigure.textContent = `${fmtMoney(calc.monthlyPayment)}/mo`;
+
+        el.breakdownList.innerHTML = calc.lines.map(item => {
+          const valText = (item.min === 0 && item.max === 0 && item.showZeroAsIncluded)
+            ? 'Included'
+            : fmtRange(item.min, item.max);
+          return `
+            <li class="ticket-row">
+              <span class="ticket-row-desc">
+                <strong>${escapeHTML(item.label)}</strong>${item.detail ? ` · ${escapeHTML(item.detail)}` : ''}
+              </span>
+              <span class="ticket-row-val tabular">${escapeHTML(valText)}</span>
+            </li>
+          `;
+        }).join('');
+
+        updateBookingSlip(calc);
+
+        if (!options.silentFeed) {
+          triggerFeedAnimation(Boolean(options.major));
+        }
+      }
+
+      function buildQuoteSlipText(calc) {
+        const name = el.custName.value.trim();
+        const zip = el.custZip.value.trim();
+        const note = el.custNote.value.trim();
+
+        const rows = [
+          `=========================================`,
+          `${getTicketHeading(calc.trade)}`,
+          `QUOTE REFERENCE: ${state.quoteRef}`,
+          `=========================================`,
+          `Service: ${calc.service.name}`,
+          `Scope: ${fmtUnit(calc.sliderVal, calc.service.slider)}`,
+          `Estimated Range: ${fmtRange(calc.totalMin, calc.totalMax)}`,
+          `Booking Deposit (${calc.depPct}%): ${fmtRange(calc.depositMin, calc.depositMax)}`,
+          `Financing: est. ${fmtMoney(calc.monthlyPayment)}/mo (${calc.months} mos @ ${calc.apr}% APR)`,
+          `-----------------------------------------`,
+          `ITEMIZED BREAKDOWN:`,
+          ...calc.lines.map(item => {
+            const val = (item.min === 0 && item.max === 0) ? 'Included' : fmtRange(item.min, item.max);
+            return `• ${item.label}: ${val}`;
+          })
+        ];
+
+        if (name || zip || note) {
+          rows.push(`-----------------------------------------`);
+          rows.push(`HOMEOWNER DETAILS:`);
+          if (name) rows.push(`Name: ${name}`);
+          if (zip) rows.push(`ZIP / Area: ${zip}`);
+          if (note) rows.push(`Notes: ${note}`);
+        }
+        rows.push(`=========================================`);
+
+        return rows.join('\n');
+      }
+
+      function updateBookingSlip(calc) {
+        const slipText = buildQuoteSlipText(calc);
+        el.slipPreview.textContent = slipText;
+        el.sealRef.textContent = state.quoteRef;
+        el.carbonCharCount.textContent = `${slipText.length} CHARS`;
+
+        const subject = `Quote Request ${state.quoteRef} — ${calc.service.name}`;
+        el.mailtoLink.href = `mailto:${encodeURIComponent(calc.trade.contactEmail)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(slipText)}`;
+
+        const cleanPhone = String(calc.trade.contactPhone || '').replace(/[^\d+]/g, '');
+        const smsSep = /iPad|iPhone|iPod/.test(navigator.userAgent) ? '&' : '?';
+        el.smsLink.href = `sms:${cleanPhone}${smsSep}body=${encodeURIComponent(slipText)}`;
+      }
+
+      function postResizeHeight() {
+        if (window.parent && window.parent !== window) {
+          const height = Math.ceil(document.documentElement.scrollHeight);
+          window.parent.postMessage({ type: 'TRADE_QUOTE_RESIZE', height }, '*');
+        }
+      }
+
+      // =========================================================================
+      // EVENT LISTENERS
+      // =========================================================================
+
+      el.tradeSwitcher.addEventListener('click', e => {
+        const btn = e.target.closest('[data-trade-btn]');
+        if (!btn) return;
+        const nextTrade = btn.dataset.tradeBtn;
+        if (nextTrade === state.tradeId) return;
+        state.tradeId = nextTrade;
+        renderTradeSwitcher();
+        renderTradeWorkspace();
+      });
+
+      el.themeBtns.forEach(btn => {
+        btn.addEventListener('click', () => applyTheme(btn.dataset.themeBtn));
+      });
+
+      el.embedToggleBtn.addEventListener('click', () => {
+        applyEmbedMode(true);
+        showToast('Clean Embed Mode active');
+      });
+
+      el.embedExitBtn.addEventListener('click', () => applyEmbedMode(false));
+
+      if (el.copyEmbedBtn) el.copyEmbedBtn.addEventListener('click', () => {
+        const trade = TRADE_WIDGET_CONFIG.trades[state.tradeId];
+        const snippet = `<iframe src="index.html?embed=1&trade=${state.tradeId}&theme=${state.theme}" width="100%" height="840" style="border:0;border-radius:16px;overflow:hidden;" loading="lazy" title="${getDisplayBrand(trade)}"></iframe>`;
+        copyTextSafe(snippet, 'Embed <iframe> snippet copied!');
+      });
+
+      el.serviceCards.addEventListener('click', e => {
+        const card = e.target.closest('[data-service-id]');
+        if (!card) return;
+        const ts = getTradeState(state.tradeId);
+        const nextId = card.dataset.serviceId;
+        if (ts.serviceId === nextId) return;
+
+        const trade = TRADE_WIDGET_CONFIG.trades[state.tradeId];
+        const nextService = trade.services.find(s => s.id === nextId);
+        if (!nextService) return;
+
+        ts.serviceId = nextId;
+        ts.sliderVal = nextService.slider.defaultVal;
+        renderTradeWorkspace();
+      });
+
+      function applySliderValue(nextVal, options = {}) {
+        const ts = getTradeState(state.tradeId);
+        const trade = TRADE_WIDGET_CONFIG.trades[state.tradeId];
+        const service = trade.services.find(s => s.id === ts.serviceId) || trade.services[0];
+        const s = service.slider;
+        const clamped = Math.min(s.max, Math.max(s.min, Number(nextVal)));
+        ts.sliderVal = clamped;
+        el.scopeSlider.value = String(clamped);
+        updateSliderVisual(service, clamped);
+        recalculateQuote(options);
+      }
+
+      el.scopeSlider.addEventListener('input', e => {
+        applySliderValue(e.target.value, { silentFeed: true });
+      });
+
+      el.scopeSlider.addEventListener('change', () => {
+        triggerFeedAnimation(false);
+      });
+
+      el.sliderDecBtn.addEventListener('click', () => {
+        const ts = getTradeState(state.tradeId);
+        const trade = TRADE_WIDGET_CONFIG.trades[state.tradeId];
+        const service = trade.services.find(s => s.id === ts.serviceId) || trade.services[0];
+        applySliderValue(Number(ts.sliderVal) - Number(service.slider.step || 1));
+      });
+
+      el.sliderIncBtn.addEventListener('click', () => {
+        const ts = getTradeState(state.tradeId);
+        const trade = TRADE_WIDGET_CONFIG.trades[state.tradeId];
+        const service = trade.services.find(s => s.id === ts.serviceId) || trade.services[0];
+        applySliderValue(Number(ts.sliderVal) + Number(service.slider.step || 1));
+      });
+
+      el.modifierGroupsContainer.addEventListener('click', e => {
+        const card = e.target.closest('[data-mod-group]');
+        if (!card) return;
+        const groupId = card.dataset.modGroup;
+        const optId = card.dataset.modOpt;
+        const ts = getTradeState(state.tradeId);
+        if (ts.modifiers[groupId] === optId) return;
+
+        ts.modifiers[groupId] = optId;
+        const siblings = el.modifierGroupsContainer.querySelectorAll(`[data-mod-group="${CSS.escape(groupId)}"]`);
+        siblings.forEach(btn => btn.setAttribute('aria-pressed', String(btn.dataset.modOpt === optId)));
+        recalculateQuote();
+      });
+
+      el.addonsWrap.addEventListener('click', e => {
+        const chip = e.target.closest('[data-addon-id]');
+        if (!chip) return;
+        const addonId = chip.dataset.addonId;
+        const ts = getTradeState(state.tradeId);
+        const idx = ts.addons.indexOf(addonId);
+        if (idx >= 0) {
+          ts.addons.splice(idx, 1);
+          chip.setAttribute('aria-pressed', 'false');
+        } else {
+          ts.addons.push(addonId);
+          chip.setAttribute('aria-pressed', 'true');
+        }
+        recalculateQuote();
+      });
+
+      el.termPills.addEventListener('click', e => {
+        const pill = e.target.closest('[data-term]');
+        if (!pill) return;
+        state.financingTerm = Number(pill.dataset.term);
+        renderTermPills();
+        recalculateQuote();
+      });
+
+      el.bookingToggleBtn.addEventListener('click', () => {
+        state.bookingOpen = !state.bookingOpen;
+        el.bookingDrawer.classList.toggle('is-open', state.bookingOpen);
+        el.bookingToggleBtn.setAttribute('aria-expanded', String(state.bookingOpen));
+        el.bookingBtnText.textContent = state.bookingOpen ? 'Hide Booking Summary' : 'Request Official Booking';
+        postResizeHeight();
+        setTimeout(postResizeHeight, 260);
+      });
+
+      [el.custName, el.custZip, el.custNote].forEach(input => {
+        input.addEventListener('input', () => updateBookingSlip(calculateEstimate()));
+      });
+
+      el.copySlipBtn.addEventListener('click', () => {
+        copyTextSafe(el.slipPreview.textContent, 'Quote slip copied to clipboard!');
+        el.copySlipBtn.classList.add('is-copied');
+        el.copySlipBtnLabel.textContent = 'Copied to Clipboard — Ready to Send';
+        el.barcodeBlock.classList.add('is-verified');
+        setTimeout(() => {
+          el.copySlipBtn.classList.remove('is-copied');
+          el.copySlipBtnLabel.textContent = 'Copy Quote Slip to Clipboard';
+          el.barcodeBlock.classList.remove('is-verified');
+        }, 2400);
+      });
+
+      if (typeof ResizeObserver !== 'undefined') {
+        new ResizeObserver(() => postResizeHeight()).observe(el.widgetRoot);
+      }
+
+
+      // Allow parent demo showcase page to switch trade & theme seamlessly without iframe reload
+      window.addEventListener('message', function (e) {
+        if (!e.data || e.data.type !== 'TRADE_QUOTE_SET') return;
+        if (e.data.theme && VALID_THEMES.includes(e.data.theme) && e.data.theme !== state.theme) {
+          applyTheme(e.data.theme);
+        }
+        if (e.data.trade && tradeKeys.includes(e.data.trade) && e.data.trade !== state.tradeId) {
+          state.tradeId = e.data.trade;
+          renderTradeSwitcher();
+          renderTradeWorkspace();
+        }
+      });
+
+      applyTheme(state.theme);
+      applyEmbedMode(state.embedMode);
+      renderTradeSwitcher();
+      renderTermPills();
+      renderTradeWorkspace();
+    })();
+  </script>
+</body>
+</html>
